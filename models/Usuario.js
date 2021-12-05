@@ -33,8 +33,7 @@ const UsuarioSchema = Schema({
     },
     rol:{
         type: Schema.Types.ObjectId,
-        ref: 'rol',
-        //default: '6190420c33a8d9f6c73b4f57',
+        ref: 'Rol',
         required: true 
     },
     idToken:{
