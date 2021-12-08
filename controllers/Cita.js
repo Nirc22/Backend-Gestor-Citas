@@ -1,7 +1,6 @@
 const { response } = require('express');
 
 const Cita = require('../models/Cita');
-const TipoCita = require('../models/TipoCita');
 
 const getCita = async (req, resp = response) => {
     const citas = await Cita.find();
@@ -41,7 +40,7 @@ const actualizarCita = async (req, resp = response) => {
 
     try {
         
-        const cita = await cita.findById(citaId);
+        const cita = await Cita.findById(citaId);
 
         if(!cita) {
             resp.status(404).json({
@@ -96,24 +95,6 @@ const eliminarCita = async (req, resp = response) => {
         resp.status(500).json({
             ok: false,
             msg: 'Error al eliminar la cita',
-        });
-    }
-}
-
-const getTipoCita = async (req, resp = response) => {
-    try {
-
-        const tipoCita = await TipoCita.find();
-        resp.status(200).json({
-            ok: true,
-            msg: 'Lista de tipos de citas',
-            tipoCita
-        });
-    } catch (error) {
-        console.log(error);
-        resp.status(500).json({
-            ok: false,
-            msg: 'error al crear el producto',
         });
     }
 }

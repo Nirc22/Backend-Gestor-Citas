@@ -98,7 +98,7 @@ const eliminarTipoCita = async (req, resp = response) => {
 }
 
 module.exports = {
-    getCita,
+    getTipoCita,
     crearTipoCita,
     actualizarTipoCita,
     eliminarTipoCita
