@@ -8,13 +8,18 @@ const CitaSchema = Schema({
         required: true    
     },
     idCupo:{
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'cupo',
+        required: true
     },
     idSede:{
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'sede',
+        required: true
     },
     idOdontologo:{
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: '',
     },
     tipoCita:{
         type: Schema.Types.ObjectId,
