@@ -90,5 +90,5 @@ const actualizarRol = async (req, resp = response) => {
 module.exports = {
     getRol,
     crearRol,
-    actualizarRol,
+    actualizarRol
 };
