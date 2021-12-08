@@ -19,7 +19,8 @@ const CitaSchema = Schema({
     },
     idOdontologo:{
         type: Schema.Types.ObjectId,
-        ref: '',
+        ref: 'odontologo',
+        required: true
     },
     tipoCita:{
         type: Schema.Types.ObjectId,

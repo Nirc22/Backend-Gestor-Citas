@@ -8,6 +8,7 @@ dbConnection();
 
 app.use('/api/auth', require('./Routes/auth'));
 app.use('/api/cita', require('./Routes/Cita'));
+app.use('/api/cita', require('./Routes/TipoCita'));
 
 app.listen(process.env.Port, () =>{
     console.log(`Servidor corriendo en el puerto ${process.env.Port}`)
