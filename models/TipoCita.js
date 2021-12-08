@@ -1,13 +1,13 @@
 const { Schema, model } = require('mongoose');
 
-const RolSchema = Schema({
+const TipoCitaSchema = Schema({
     nombre: {
         type: String,
         required: true
     }
 },
 {
-    collection: 'roles'
+    collection: 'tipoCitas'
 });
 
-module.exports = model('rol', RolSchema)
+module.exports = model('tipoCita', TipoCitaSchema)
