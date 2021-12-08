@@ -35,10 +35,10 @@ const UsuarioSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Rol',
         required: true 
-    },
-    idToken:{
-        type: String
     }
+    // idToken:{
+    //     type: String
+    // }
 });
 
 module.exports = model('usuario', UsuarioSchema)

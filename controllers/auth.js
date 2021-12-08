@@ -6,22 +6,24 @@ const crearUsuario = async (req, resp = response) => {
     //console.log(req.body);
     //const{name, email, password} = req.body;
 
-    const { email, password } = req.body;
+    const { email, password, documento } = req.body;
+    console.log(req.body);
+    
 
     try {
-        let usuario = await Usuario.findOne({ email });
+        let usuario = await Usuario.findOne({ email, documento });
         if (usuario) {
             return resp.status(400).json({
                 ok: false,
-                msg: 'Ya existe un usuario registrado con ese email'
+                msg: 'Ya existe un usuario registrado con ese email o documento'
             })
         }
         usuario = new Usuario(req.body);
 
         //Encriptar contraseña
 
-        const salt = bcrypt.genSaltSync();
-        usuario.password = bcrypt.hashSync(password, salt);
+        //const salt = bcrypt.genSaltSync();
+        //usuario.password = bcrypt.hashSync(password, salt);
 
         await usuario.save();
 
@@ -54,7 +56,7 @@ const loginUsuario = async (req, resp = response) => {
             });
         }
         //confirmar contraseña
-        const validPassword = bcrypt.compareSync(password, usuario.password);
+        //const validPassword = bcrypt.compareSync(password, usuario.password);
         
 
         if (!validPassword) {
@@ -80,6 +82,40 @@ const loginUsuario = async (req, resp = response) => {
     }
 }
 
+const actualizarPassword = async (req, resp = response) => {
+
+    const documento = req.body;
+
+    try {
+        
+        const usuario = await Usuario.find(documento);
+
+        if(!usuario) {
+            resp.status(404).json({
+                ok: false,
+                msg: 'El usuario no existe',
+            });
+        }
+
+        const passwordUpdate = await Usuario.findByIdAndUpdate(productoId, req.body, { new: true });
+
+        resp.json({
+            ok: true,
+            msg: 'Producto actualizado de manera exitosa',
+            usuasrio: passwordUpdate
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'error al actualizar el producto',
+        });
+    }
+}
+
+
 const revalidarToken = async (req, resp = response) => {
 
     const { uid, name } = req;
@@ -96,4 +132,5 @@ module.exports = {
     crearUsuario,
     loginUsuario,
     revalidarToken,
+    actualizarPassword
 }
