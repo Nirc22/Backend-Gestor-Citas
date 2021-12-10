@@ -16,7 +16,6 @@ router.post(
         check('password', 'El password debe ser de 6 caracteres').isLength({min:6}),
         check('rol',"El rol es obligatorio").not().isEmpty(),
         validarCampos
-        
     ],
     crearUsuario);
 
