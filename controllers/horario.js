@@ -12,6 +12,23 @@ const obtenerHorarios = async (req, resp = response) => {
     });
 }
 
+const obtenerHorario = async (req, resp = response) => {
+    const horarioId = req.params.id;
+    const horario = await Horario.findById(horarioId);
+
+    if(!horario){
+        resp.status(404).json({
+            ok: false,
+            msg: 'El id del horario no coincide con ningun elemento en la base de datos'
+        });
+    }
+
+    resp.status(200).json({
+        ok: true,
+        msg: 'Horario por Id',
+        horario
+    });
+}
 
 const crearHorario = async (req, resp = response) => {
     const horario = new Horario(req.body);
@@ -90,9 +107,9 @@ const eliminarHorario = async (req, resp = response) => {
 } 
 
 module.exports = {
+    obtenerHorario,
     obtenerHorarios,
     crearHorario,
     actualizarHorario,
     eliminarHorario
 }
-

@@ -2,20 +2,23 @@ const { Router, response } = require('express');
 const router = Router();
 
 // Controlador
-const { loginUsuario, crearUsuario, revalidarToken } = require('../controllers/auth');
+const { obtenerCupo, obtenerCupos, crearCupo, actualizarCupo, eliminarCupo } = require('../controllers/cupo');
 
 // Rutas
 
-// Obtener cupo
-//router.get('/:id', obtenerCupo);
+// Obtener cupos
+router.get('/listar', obtenerCupos);
+
+// Obtener cupos por idHorario
+router.get('/listar/:id', obtenerCupo);
 
 // Crear cupo
-//router.post('/crear', crearCupo);
+router.post('/crear', crearCupo);
 
 // Actualizar cupo
-//router.put('/actualizar/:id', actualizarCupo);
+router.put('/actualizar/:id', actualizarCupo);
 
 // Eliminar cupo
-//router.delete('/eliminar/:id', actualizarCupo);
+router.delete('/eliminar/:id', eliminarCupo);
 
 module.exports = router;

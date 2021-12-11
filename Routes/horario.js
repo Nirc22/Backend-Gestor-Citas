@@ -2,12 +2,15 @@ const { Router, response } = require('express');
 const router = Router();
 
 // Controlador
-const { obtenerHorarios, crearHorario, actualizarHorario, eliminarHorario } = require('../controllers/horario');
+const { obtenerHorarios, obtenerHorario, crearHorario, actualizarHorario, eliminarHorario } = require('../controllers/horario');
 
 // Rutas
 
 // Obtener Horarios
 router.get('/listar', obtenerHorarios);
+
+// Obtener Horario
+router.get('/listar/:id', obtenerHorario);
 
 // Crear Horario
 router.post('/crear', crearHorario);
