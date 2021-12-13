@@ -12,7 +12,6 @@ const HorarioSchema = Schema({
     horaInicio: {
         type: Date,
         required: true,
-        unique: true
     },
     horaFin: {
         type: Date,

@@ -11,7 +11,7 @@ router.get('/', getHClinica);
 
 router.post('/create', crearHClinica);
 
-router.put('/update', actualizarHClinica);
+router.put('/update/:id', actualizarHClinica);
 
 
 

@@ -11,7 +11,7 @@ router.get('/', getSede);
 
 router.post('/create', crearSede);
 
-router.put('/update', actualizarSede);
+router.put('/update/:id', actualizarSede);
 
 
 

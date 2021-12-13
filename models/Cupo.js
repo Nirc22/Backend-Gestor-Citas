@@ -12,11 +12,11 @@ const CupoSchema = Schema({
     },
     estado: {
         type: String,
-        required: true
+        default: true
     },
     idHorario: {
         type: Schema.Types.ObjectId,
-        ref: 'horario',
+        ref: 'Horario',
         required: true 
     }
 });

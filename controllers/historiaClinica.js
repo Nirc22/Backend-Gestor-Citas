@@ -77,7 +77,7 @@ const actualizarHClinica = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'error al actualizar la sede',
+            msg: 'error al actualizar la historia clinica',
         });
     }
 }

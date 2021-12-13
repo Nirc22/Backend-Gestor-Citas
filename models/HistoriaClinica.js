@@ -6,9 +6,9 @@ const H_ClinicaSchema = Schema({
         ref: 'Usuario',
         required: true 
     },
-    idCitaCliente:{
+    idCita:{
         type: Schema.Types.ObjectId,
-        ref: 'CitaCliente',
+        ref: 'Cita',
         required: true 
     },
     observacion: {

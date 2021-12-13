@@ -36,6 +36,10 @@ const UsuarioSchema = Schema({
         ref: 'Rol',
         required: true 
     },
+    estado: {
+        type: Boolean,
+        default: true
+    },
     idToken:{
         type: String
     }
