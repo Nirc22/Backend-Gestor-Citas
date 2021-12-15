@@ -18,7 +18,7 @@ const getRol = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'error al crear roles',
+            msg: 'error al listar roles',
         });
     }
 }
@@ -28,16 +28,12 @@ const getRol = async (req, resp = response) => {
 const crearRol = async (req, resp) => {
 
     const rol = new Rol(req.body);
-    console.log(rol);
-    console.log(req.body);
-    //return;
-
 
     try {
         const rolSave = await rol.save();
         resp.status(201).json({
             ok: true,
-            msg: 'Rol creada de manera exitosa',
+            msg: 'Rol creado de manera exitosa',
             rolSave
         });
 

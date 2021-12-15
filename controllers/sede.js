@@ -7,12 +7,20 @@ const Sede = require('../models/Sede');
 const getSede = async (req, resp = response) => {
 
     const sedes = await Sede.find();
-    resp.status(200).json({
-        ok: true,
-        msg: 'Lista de sedes',
-        sedes
-    });
-
+    try{
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de sedes',
+            sedes
+        });
+        
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'error al obtener las sedes',
+        });
+    }
 }
 
 /**crearSede */
@@ -34,7 +42,6 @@ const crearSede = async (req, resp) => {
         resp.status(500).json({
             ok: false,
             msg: 'error al crear la sede',
-            sede
         });
     }
 }
