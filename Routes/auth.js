@@ -14,7 +14,7 @@ router.post(
         check('documento','El documenot debe tener al menos 7 caracteres').isLength({min:7}),
         check('fechaNacimiento','La fecha de nacimiento es obligatoria').not().isEmpty(),
         check('password', 'El password debe ser de 6 caracteres').isLength({min:6}),
-        check('rol',"El rol es obligatorio").not().isEmpty(),
+        //check('rol',"El rol es obligatorio").not().isEmpty(),
         validarCampos
         
     ],

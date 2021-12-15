@@ -30,7 +30,7 @@ const crearRol = async (req, resp) => {
     const rol = new Rol(req.body);
     console.log(rol);
     console.log(req.body);
-    return;
+    //return;
 
 
     try {
@@ -67,7 +67,7 @@ const actualizarRol = async (req, resp = response) => {
             });
         }
 
-        const rolActualizado = await Sede.findByIdAndUpdate(rolId, req.body, { new: true });
+        const rolActualizado = await Rol.findByIdAndUpdate(rolId, req.body, { new: true });
 
         resp.json({
             ok: true,
@@ -80,7 +80,7 @@ const actualizarRol = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'error al actualizar la sede',
+            msg: 'error al actualizar el rol',
         });
     }
 }

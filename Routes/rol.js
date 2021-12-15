@@ -20,7 +20,7 @@ router.post(
     crearRol);
 
 router.put(
-    '/update', 
+    '/update/:id', 
     [
         check('nombre','El nombre del rol es obligatorio').not().isEmpty(),
         validarCampos

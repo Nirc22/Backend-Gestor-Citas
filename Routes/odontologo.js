@@ -15,7 +15,7 @@ router.post(
     '/create', 
     [
         check('nombre','El nombre es obligatorio').not().notEmpty(),
-        check('nombre','El apellido es obligatorio').not().notEmpty(),
+        check('apellidos','El apellido es obligatorio').not().notEmpty(),
         check('email', 'El email es obligatorio').isEmail(),
         check('telefono','El telefono debe ser de 10 caracteres').isLength({min:10}),
         check('documento','El documenot debe tener al menos 7 caracteres').isLength({min:7}),
@@ -28,7 +28,7 @@ router.post(
     crearOdontologo);
 
 router.put(
-    '/update', 
+    '/update/:id', 
     [
         check('nombre','El nombre es obligatorio').not().notEmpty(),
         check('nombre','El apellido es obligatorio').not().notEmpty(),

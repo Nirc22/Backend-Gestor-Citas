@@ -20,7 +20,7 @@ router.post(
     crearEspecializacion);
 
 router.put(
-    '/update', 
+    '/update/:id', 
     [
         check('nombre','El nombre de la especializacion es obligatoria').not().isEmpty(),
         validarCampos

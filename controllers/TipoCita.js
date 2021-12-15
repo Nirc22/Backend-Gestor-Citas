@@ -80,7 +80,7 @@ const eliminarTipoCita = async (req, resp = response) => {
             });
         }
 
-        await Cita.findByIdAndDelete(tipoCita);
+        await TipoCita.findByIdAndDelete(tipoCita);
 
         resp.json({
             ok: true,

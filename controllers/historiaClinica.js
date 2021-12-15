@@ -5,24 +5,15 @@ const HistoriaClinica = require('../models/HistoriaClinica');
 /**getHClinica */
 
 const getHClinica = async (req, resp = response) => {
-    try {
 
-        const hClinica = await HistoriaClinica.find();
-        resp.status(200).json({
-            ok: true,
-            msg: 'Lista de historias clinicas',
-            hClinica
-        });
-        
-    } catch (error) {
-        console.log(error);
-        resp.status(500).json({
-            ok: false,
-            msg: 'error al crear la historia clinica',
-        });
-    }
+    const hClinica = await HistoriaClinica.find();
+    resp.status(200).json({
+        ok: true,
+        msg: 'Lista de historias clinicas',
+        hClinica
+    });
+
 }
-
 /**crearHClinica */
 
 const crearHClinica = async (req, resp = response) => {
@@ -54,10 +45,10 @@ const actualizarHClinica = async (req, resp = response) => {
     const hClinicaId = req.params.id;
 
     try {
-        
+
         const hClinica = await HistoriaClinica.findById(hClinicaId);
 
-        if(!hClinica) {
+        if (!hClinica) {
             resp.status(404).json({
                 ok: false,
                 msg: 'El id de la historia clinica no coincide con ningun elemento en la base de datos',

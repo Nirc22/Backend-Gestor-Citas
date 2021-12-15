@@ -3,8 +3,9 @@ const { response } = require('express');
 const Cita = require('../models/Cita');
 
 const getCita = async (req, resp = response) => {
-    const citas = await Cita.find();
-                                    // .populate('category');
+    const citas = await Cita.find()
+                            .populate('idSede')
+                            .populate('tipoCita')
 
     resp.status(200).json({
         ok: true,

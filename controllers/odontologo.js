@@ -1,5 +1,5 @@
 const { response } = require('express');
-const odontologo = require('../models/Odontologo');
+const Odontologo = require('../models/Odontologo');
 
 
 /**getOdontologo */
@@ -11,7 +11,7 @@ const getOdontologo = async (req, resp = response) => {
         resp.status(200).json({
             ok: true,
             msg: 'Lista de odontologos',
-            rol
+            odontologo
         });
         
     } catch (error) {
@@ -30,7 +30,7 @@ const crearOdontologo = async (req, resp) => {
     const odontologo = new Odontologo(req.body);
     console.log(odontologo);
     console.log(req.body);
-    return;
+    //return;
 
 
     try {
@@ -66,9 +66,7 @@ const actualizarOdontologo = async (req, resp = response) => {
                 msg: 'El id del odontologo no coincide con ningun elemento en la base de datos',
             });
         }
-
-        const odontologoActualizado = await Odontologo.findfindByIdAndUpdate(odontologoId, req.body, { new: true });
-
+        const odontologoActualizado = await Odontologo.findByIdAndUpdate(odontologoId, req.body, {new: true});
         resp.json({
             ok: true,
             msg: 'Odontologo actualizado exitosamente',

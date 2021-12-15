@@ -22,7 +22,7 @@ router.post(
     crearHClinica);
 
 router.put(
-    '/update', 
+    '/update/:id', 
     [
         check('idUsuario','El id del usuario es obligatorio').not().isEmpty(),
         check('idCitaCliente','El id de la cita es obligatoria').not().isEmpty(),

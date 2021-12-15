@@ -12,7 +12,7 @@ router.post(
         check('idCliente','El id del cliente es obligatorio').not().isEmpty(),
         check('idCupo','El id del cupo es obligatorio').not().isEmpty(),
         check('idSede','El id de la sede es obligatoria').not().isEmpty(),
-        check('idOdontolog','El id del odontologo es obligatorio').not().isEmpty(),
+        check('idOdontologo','El id del odontologo es obligatorio').not().isEmpty(),
         check('tipoCita', 'El tipo de cita es obligatoria').not().isEmpty(),
         validarCampos
     ],
@@ -24,7 +24,7 @@ router.put(
         check('idCliente','El id del cliente es obligatorio').not().isEmpty(),
         check('idCupo','El id del cupo es obligatorio').not().isEmpty(),
         check('idSede','El id de la sede es obligatoria').not().isEmpty(),
-        check('idOdontolog','El id del odontologo es obligatorio').not().isEmpty(),
+        check('idOdontologo','El id del odontologo es obligatorio').not().isEmpty(),
         check('tipoCita', 'El tipo de cita es obligatoria').not().isEmpty(),
         validarCampos
     ],
