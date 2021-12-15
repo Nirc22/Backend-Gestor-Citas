@@ -1,8 +1,16 @@
-const {Router, response} = require('express');
+const {Router} = require('express');
 const { check } = require('express-validator');
-const {getCita, crearCita, actualizarCita, eliminarCita} = require('../controllers/Cita');
+
+
 const { validarCampos } = require('../middlewares/validar-campos');
+const { validarJWT } = require('../middlewares/validar-jwt');
+
+const {getCita, crearCita, actualizarCita, eliminarCita} = require('../controllers/Cita');
+
 const router = Router();
+
+// Validar token
+router.use(validarJWT);
 
 router.get('/listar', getCita);
 

@@ -1,11 +1,16 @@
-const { Router, response } = require('express');
+const { Router } = require('express');
 const { check } = require('express-validator');
 const router = Router();
+
+
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 //Controllers
 const { getOdontologo, crearOdontologo, actualizarOdontologo, } = require('../controllers/odontologo');
 const { validarCampos } = require('../middlewares/validar-campos');
 
+//Aplicar validación a todas las rutas
+router.use(validarJWT);
 
 //Rutas
 

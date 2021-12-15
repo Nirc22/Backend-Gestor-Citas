@@ -1,20 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const HorarioSchema = Schema({
-    fechaInicio: {
+    fechaHoraInicio: {
         type: Date,
         required: true
     },
-    fechaFin:{
-        type: Date,
-        required: true
-    },
-    horaInicio: {
-        type: Date,
-        required: true,
-        unique: true
-    },
-    horaFin: {
+    fechaHoraFin:{
         type: Date,
         required: true
     },

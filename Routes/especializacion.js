@@ -1,11 +1,13 @@
-const { Router, response } = require('express');
-const { check } = require('express-validator');
+const { Router } = require('express');
 const router = Router();
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 //Controllers
 const { getEspecializacion, crearEspecializacion, actualizarEspecializacion, } = require('../controllers/especializacion');
 const { validarCampos } = require('../middlewares/validar-campos');
 
+//Aplicar validación a todas las rutas
+router.use(validarJWT);
 
 //Rutas
 
