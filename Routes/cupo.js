@@ -1,8 +1,12 @@
-const { Router, response } = require('express');
+const { Router } = require('express');
 const router = Router();
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 // Controlador
 const { obtenerCupo, obtenerCupos, crearCupo, actualizarCupo, eliminarCupo } = require('../controllers/cupo');
+
+//Aplicar validación a todas las rutas
+router.use(validarJWT);
 
 // Rutas
 

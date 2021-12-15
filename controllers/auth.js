@@ -1,14 +1,12 @@
 const { response } = require('express');
+const bcrypt = require('bcryptjs');
 
 const Usuario = require('../models/Usuario');
+const { generarJWT } = require('../helpers/generar-jwt');
+
 const crearUsuario = async (req, resp = response) => {
 
-    //console.log(req.body);
-    //const{name, email, password} = req.body;
-
     const { email, password, documento } = req.body;
-    console.log(req.body);
-    
 
     try {
         let usuario = await Usuario.findOne({ email, documento });
@@ -21,16 +19,15 @@ const crearUsuario = async (req, resp = response) => {
         usuario = new Usuario(req.body);
 
         //Encriptar contraseña
-
-        //const salt = bcrypt.genSaltSync();
-        //usuario.password = bcrypt.hashSync(password, salt);
+        const salt = bcrypt.genSaltSync();
+        usuario.password = bcrypt.hashSync(password, salt);
 
         await usuario.save();
 
         resp.status(201).json({
             ok: true,
             msg: 'Registro de usuario exitoso',
-            udi: usuario.id,
+            uid: usuario.id,
             name: usuario.name
         });
     } catch (error) {
@@ -55,18 +52,20 @@ const loginUsuario = async (req, resp = response) => {
                 msg: 'Usuario o contraseña erradas'
             });
         }
-        //confirmar contraseña
-        //const validPassword = bcrypt.compareSync(password, usuario.password);
-        
 
+        //confirmar contraseña
+        const validPassword = bcrypt.compareSync(password, usuario.password);
+        
         if (!validPassword) {
             resp.status(400).json({
                 ok: true,
                 msg: 'Usuario o contraseña erradas'
             });
         }
+
         //generar token
         const token = await generarJWT(usuario.id, usuario.name);
+        
         resp.json({
             ok: true,
             msg: 'Ok',
@@ -74,45 +73,92 @@ const loginUsuario = async (req, resp = response) => {
             name: usuario.name,
             token
         });
+
     } catch (error) {
         resp.status(500).json({
             ok: false,
             msg: 'Error al autenticar'
-        })
+        });
     }
+}
+
+const logoutUsuario = async (req, resp = response) => {
+
+    /*
+    const options = {
+        expires: new Date(Date.now() + 5000),
+    }
+
+    
+    resp.cookie('jwt', 'expiredtoken', options);
+    resp.status(200).json({
+        ok: true,
+        msg: 'Sesión cerrada con exito'
+    });*/
+
+    //
+    let token = '';
+    token = req.headers['x-access-token'] || req.headers['authorization'];
+
+    if(!token) {
+        resp.status(401).json({
+            ok: false,
+            msg: 'No hay token en la petición'
+        });
+    }
+
+    try {
+        jwt.sign(token, "", { expiresIn: 1 } , (logout, err) => {
+            if (logout) {
+                resp.status(200).json({
+                    ok: true,
+                    msg: 'Sesión cerrada con exito'
+                });
+            } else {
+                console.log(err);
+                resp.status(401).json({
+                    ok: false,
+                    msg: 'Error al cerrar sesión'
+                });
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(401).json({
+            ok: false,
+            msg: 'Error al cerrar sesión'
+        });
+    }    
+
 }
 
 const actualizarPassword = async (req, resp = response) => {
 
-    const documento = req.body;
+    const {password} = req.body;
+    const usuarioAutenticado = req.usuario;
 
     try {
-        
-        const usuario = await Usuario.find(documento);
 
-        if(!usuario) {
-            resp.status(404).json({
-                ok: false,
-                msg: 'El usuario no existe',
-            });
-        }
+        //Encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        usuarioAutenticado.password = bcrypt.hashSync(password, salt);
 
-        const passwordUpdate = await Usuario.findByIdAndUpdate(productoId, req.body, { new: true });
+        const passwordUpdate = await Usuario.findByIdAndUpdate(usuarioAutenticado.id, usuarioAutenticado, { new: true });
 
         resp.json({
             ok: true,
-            msg: 'Producto actualizado de manera exitosa',
-            usuasrio: passwordUpdate
+            msg: 'Contraseña actualizada de manera exitosa',
+            usuario: passwordUpdate
         });
-
 
     } catch (error) {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'error al actualizar el producto',
+            msg: 'error al actualizar la contraseña',
         });
     }
+
 }
 
 
@@ -131,6 +177,7 @@ const revalidarToken = async (req, resp = response) => {
 module.exports = {
     crearUsuario,
     loginUsuario,
+    logoutUsuario,
     revalidarToken,
     actualizarPassword
 }

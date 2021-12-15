@@ -1,8 +1,12 @@
-const { Router, response } = require('express');
+const { Router } = require('express');
 const router = Router();
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 // Controlador
 const { obtenerHorarios, obtenerHorario, crearHorario, actualizarHorario, eliminarHorario } = require('../controllers/horario');
+
+//Aplicar validación a todas las rutas
+router.use(validarJWT);
 
 // Rutas
 
