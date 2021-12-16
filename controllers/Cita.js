@@ -1,6 +1,7 @@
 const { response } = require('express');
 
 const Cita = require('../models/Cita');
+const Cupo = require('../models/Cupo');
 
 const getCita = async (req, resp = response) => {
     const citas = await Cita.find()
@@ -17,9 +18,25 @@ const getCita = async (req, resp = response) => {
 const crearCita = async (req, resp = response) => { 
     
     const cita = new Cita(req.body);
+    const { idCupo } = req.body;
+    console.log(cita);
 
     try {
+        let citas = await Cita.findOne({idCupo});
+        if(citas){
+            return resp.status(400).json({
+                ok: false,
+                msg: 'No hay cupo'
+            })
+        }
         const citaSave = await cita.save();
+        
+        let cupo = await Cupo.findById( idCupo );
+        console.log(cupo);
+        // await Cupo.findByIdAndUpdate( cupo, { estado: false } );
+        cupo.estado = !cupo.estado;
+        await Cupo.findByIdAndUpdate(idCupo, cupo, {new: true});
+
         resp.status(201).json({
             ok: true,
             msg: 'Cita creada de manera exitosa',

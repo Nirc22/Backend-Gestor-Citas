@@ -14,17 +14,17 @@ const CitaSchema = Schema({
     },
     idSede:{
         type: Schema.Types.ObjectId,
-        ref: 'Sede',
+        ref: 'sede',
         required: true
     },
     idOdontologo:{
         type: Schema.Types.ObjectId,
-        ref: 'Odontologo',
+        ref: 'odontologo',
         required: true
     },
     tipoCita:{
         type: Schema.Types.ObjectId,
-        ref: 'TipoCita',
+        ref: 'tipoCita',
         required: true
     }
 });

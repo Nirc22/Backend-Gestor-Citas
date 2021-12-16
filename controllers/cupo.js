@@ -32,6 +32,7 @@ const obtenerCupo = async (req, resp = response) => {
 
 const crearCupo = async (req, resp = response) => {
     const cupo = new Cupo(req.body);
+    console.log(cupo)
 
     try {
         const cupoSave = await cupo.save();
