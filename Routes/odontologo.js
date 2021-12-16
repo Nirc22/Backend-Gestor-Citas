@@ -25,8 +25,9 @@ router.post(
         check('telefono','El telefono debe ser de 10 caracteres').isLength({min:10}),
         check('documento','El documenot debe tener al menos 7 caracteres').isLength({min:7}),
         check('fechaNacimiento','La fecha de nacimiento es obligatoria').not().isEmpty(),
+        check('password','La contraseña debe ser de minimo 6 caracteres').isLength({min:6}),
         check('idEspecializacion','El id de la especializacion es obligatoria').not().notEmpty(),
-        check('idHorario','El id del horario es obligatorio').not().notEmpty(),
+        check('idCupo','El id del horario es obligatorio').not().notEmpty(),
         check('idSede','El id de la sede es obligatoria').not().notEmpty(),
         validarCampos
     ],

@@ -9,11 +9,18 @@ const crearUsuario = async (req, resp = response) => {
     const { email, password, documento } = req.body;
     // Falta odontólogo
     try {
-        let usuario = await Usuario.findOne({ email, documento });
+        let usuario = await Usuario.findOne({ documento });
+        let usuario2 = await Usuario.findOne({ email});
         if (usuario) {
             return resp.status(400).json({
                 ok: false,
-                msg: 'Ya existe un usuario registrado con ese email o documento'
+                msg: 'Ya existe un usuario registrado con ese documento'
+            })
+        }
+        if(usuario2){
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Ya existe un usuario registrado con ese email'
             })
         }
         usuario = new Usuario(req.body);
