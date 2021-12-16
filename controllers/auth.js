@@ -5,9 +5,9 @@ const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/generar-jwt');
 
 const crearUsuario = async (req, resp = response) => {
-
+    
     const { email, password, documento } = req.body;
-
+    // Falta odontólogo
     try {
         let usuario = await Usuario.findOne({ email, documento });
         if (usuario) {
@@ -45,6 +45,8 @@ const loginUsuario = async (req, resp = response) => {
     try {
         //confirmar email
         let usuario = await Usuario.findOne({ email });
+
+        //Falta mirar lo del odontólogo
 
         if (!usuario) {
             resp.status(400).json({
