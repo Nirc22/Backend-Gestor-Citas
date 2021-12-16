@@ -25,6 +25,7 @@ app.use('/api/odontologo',require('./Routes/odontologo'));
 app.use('/api/especializacion',require('./Routes/especializacion'));
 app.use('/api/horario', require('./Routes/horario'));
 app.use('/api/cupo', require('./Routes/cupo'));
+app.use("/api/password-reset", require('./Routes/password-reset'));
 
 app.listen(process.env.Port, () =>{
     console.log(`Servidor corriendo en el puerto ${process.env.Port}`);
