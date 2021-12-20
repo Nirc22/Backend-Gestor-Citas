@@ -7,26 +7,29 @@ const Especializacion = require('../models/Especializacion');
 
 const getEspecializacion = async (req, resp = response) => {
 
-    const especializacion = await Especializacion.find();
-    resp.status(200).json({
-        ok: true,
-        msg: 'Lista de especializaciones',
-        especializacion
-    });
-
+    try {
+        const especializacion = await Especializacion.find();
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de especializaciones',
+            especializacion
+        });
+    }
+    catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'error al listar especializaciones',
+        });
+    }
 }
 
 /**crearEspecializacion */
 
 const crearEspecializacion = async (req, resp) => {
 
-    const especializacion = new Especializacion(req.body);
-    console.log(especializacion);
-    console.log(req.body);
-    
-
-
     try {
+        const especializacion = new Especializacion(req.body);
         const especializacionSave = await especializacion.save();
         resp.status(201).json({
             ok: true,
@@ -38,7 +41,7 @@ const crearEspecializacion = async (req, resp) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'error al crear especializacion',
+            msg: 'Error al crear especializacion',
         });
     }
 }
@@ -47,10 +50,8 @@ const crearEspecializacion = async (req, resp) => {
 
 const actualizarEspecializacion = async (req, resp = response) => {
 
-    const especializacionId = req.params.id;
-
     try {
-
+        const especializacionId = req.params.id;
         const especializacion = await Especializacion.findById(especializacionId);
 
         if (!especializacion) {
@@ -62,14 +63,14 @@ const actualizarEspecializacion = async (req, resp = response) => {
 
         const especializacionActualizado = await Especializacion.findByIdAndUpdate(especializacionId, req.body, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Especializacion actualizada exitosamente',
             especializacion: especializacionActualizado
         });
 
 
-    } catch (error) {
+    } catch(error) {
         console.log(error);
         resp.status(500).json({
             ok: false,

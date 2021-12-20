@@ -3,12 +3,19 @@ const TipoCita = require('../models/TipoCita');
 
 const getTipoCita = async (req, resp = response) => {
     const tipoCitas = await TipoCita.find();
-
-    resp.status(200).json({
-        ok: true,
-        msg: 'Lista de tipo de citas',
-        tipoCitas
-    });
+    try{
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de tipo de citas',
+            tipoCitas
+        });
+    }catch(error){
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al listar el tipo de cita',
+        });
+    }
+    
 }
 
 const crearTipoCita = async (req, resp = response) => { 

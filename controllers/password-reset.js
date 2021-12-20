@@ -1,42 +1,49 @@
-const { Usuario } = require("../models/Usuario");
-const Token = require("../models/token");
-const crypto = require("crypto");
-const Joi = require("joi");
-const express = require("express");
-const router = express.Router();
 const nodemailer = require("nodemailer");
+const bcrypt = require('bcryptjs');
+
+const  Usuario  = require("../models/Usuario");
+const Odontologo = require("../models/Odontologo");
+
 const { generarJWT } = require('../helpers/generar-jwt');
+const jwt = require('jsonwebtoken');
 
 const enviarLink = async (req, res) => {
     try {
-
-        //Me busca si el usuario existe o no 
+    
         const user = await Usuario.findOne({ email: req.body.email });
-        if (!user)
-            return res.status(400).send("El correo no existe");
+        const odontologo = await Odontologo.findOne({ email: req.body.email });
 
+        console.log(user)
+        console.log(odontologo)
 
-        //generar token
-        const token = await generarJWT(user.id, user.name);
+        let _id = ''; 
+        let email = '';
 
-        //si existe el usuario creo el token con el id 
-        let token = await Token.findOne({ userId: user._id });
-
-        console.log("token "+ token)
-        
-        if (!token) { 
-            token = await new Token({ //me guarda el token en la colección de token por si no existe el token
-                userId: user._id,
-                token: crypto.randomBytes(32).toString("hex"),
-            }).save();
+        if (user){
+            _id = user._id;
+            email = user.email;
+            console.log(email)
+        }
+        else
+        {
+            if(odontologo){
+                _id = odontologo._id;
+                email = odontologo.email;
+            }else
+            {
+                return res.status(400).send("El correo no existe");
+            }
         }
 
-        const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
-        //await sendEmail(user.email, "Password reset", link);
+        const token = await generarJWT(_id);
+
+        console.log("token "+ token)
 
 
+        const link = `${process.env.BASE_URL}/password-reset/${_id}/${token}`;
 
-        res.send("password reset link sent to your email account");
+
+        res.status(200).json("El link para restaurar la constraseña fue enviado a su correo");
 
         try {
       
@@ -52,47 +59,58 @@ const enviarLink = async (req, res) => {
             
             await transporter.sendMail({
                 from: '"Fred Foo 👻" <foo@example.com>',
-                to: user.email,
+                to: email,
                 subject: 'Forgot password',
                 text: link,
             });
-    
-            console.log("email sent sucessfully");
 
+            console.log("enviado")
 
         } catch (error) {
-            console.log(error, "email not sent");
+            res.status(500).json("Correo no enviado");
         }
        
         
     } catch (error) {
-        res.send("An error occured");
+        res.status(500).json("Ocurrió un error");
         console.log(error);
     }
 }
 
-const restablecer= async (req, res) => {
+const restablecer = async (req, res) => {
     try {
+        const token = req.params.token;
+        const {uid} = jwt.verify(token, process.env.SECRET_KEY);
 
-        const user = await Usuario.findById(req.params.id);
-        if (!user) return res.status(400).send("invalid link or expired");
+        const user = await Usuario.findById(uid);
+        const odontologo = await Odontologo.findById(uid);
 
+        password = req.body.password;
 
-        const token = await Token.findOne({
-            userId: user._id,
-            token: req.params.token,
-        });
+        const salt = bcrypt.genSaltSync();
+        
 
-        if (!token) return res.status(400).send("Invalid link or expired");
+        if(user){
+            user.password = bcrypt.hashSync(password, salt);
+            await user.save();
+        }else{
+            if(odontologo){
+                odontologo.password = bcrypt.hashSync(password, salt);
+                await odontologo.save();
+            }
+        }
+        
+     //Error a partir de acá
+        /*const jwtSign = jwt.sign(token, "algo", { expiresIn: 5 });
 
-        user.password = req.body.password;
-        await user.save();
-        await token.delete();
-
-        res.send("password reset sucessfully.");
+        console.log("sign"+jwtSign);
+        if(jwtSign){
+            res.status(200).json("Contraseña restablecida exitosamente");
+        } */
+            
         
     } catch (error) {
-        res.send("An error occured");
+        res.status(500).json("Token expirado o inválido");
         console.log(error);
     }
 }

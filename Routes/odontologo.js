@@ -6,7 +6,7 @@ const router = Router();
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 //Controllers
-const { getOdontologo, crearOdontologo, actualizarOdontologo, } = require('../controllers/odontologo');
+const { getOdontologo, crearOdontologo, actualizarOdontologo, getOdontologoById, } = require('../controllers/odontologo');
 const { validarCampos } = require('../middlewares/validar-campos');
 
 //Aplicar validación a todas las rutas
@@ -15,6 +15,8 @@ router.use(validarJWT);
 //Rutas
 
 router.get('/', getOdontologo);
+
+router.get('/:id', getOdontologoById);
 
 router.post(
     '/create', 

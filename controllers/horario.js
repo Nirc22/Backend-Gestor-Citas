@@ -3,13 +3,21 @@ const { response } = require('express');
 const Horario = require('../models/Horario');
 
 const obtenerHorarios = async (req, resp = response) => {
-    const horarios = await Horario.find();
 
-    resp.status(200).json({
-        ok: true,
-        msg: 'Lista de Horarios',
-        horarios
-    });
+    try{
+        const horarios = await Horario.find();
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de Horarios',
+            horarios
+        });
+    }catch(error){
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error lista de Horarios',
+        })
+    }
+    
 }
 
 const obtenerHorario = async (req, resp = response) => {
@@ -23,17 +31,24 @@ const obtenerHorario = async (req, resp = response) => {
         });
     }
 
-    resp.status(200).json({
-        ok: true,
-        msg: 'Horario por Id',
-        horario
-    });
+    try{
+        resp.status(200).json({
+            ok: true,
+            msg: 'Horario por Id',
+            horario
+        });
+    }catch(error){
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al obtener el Horario',
+        })
+    }
+
 }
 
 const crearHorario = async (req, resp = response) => {
-    const horario = new Horario(req.body);
-
     try {
+        const horario = new Horario(req.body);
         const horarioSave = await horario.save();
         resp.status(201).json({
             ok: true,
@@ -50,9 +65,9 @@ const crearHorario = async (req, resp = response) => {
 }
 
 const actualizarHorario = async (req, resp = response) => {
-    const horarioId = req.params.id;
 
     try {
+        const horarioId = req.params.id;
         const horario = await Horario.findById(horarioId);
 
         if(!horario){
@@ -79,9 +94,9 @@ const actualizarHorario = async (req, resp = response) => {
 }
 
 const eliminarHorario = async (req, resp = response) => {
-    const horarioId = req.params.id;
 
     try {
+        const horarioId = req.params.id;
         const horario = await Horario.findById(horarioId);
 
         if(!horario){
@@ -93,10 +108,11 @@ const eliminarHorario = async (req, resp = response) => {
 
         await Horario.findByIdAndDelete(horarioId);
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Horario eliminado de manera exitosa',
         })
+
     } catch (error) {
         console.log(error);
         resp.status(500).json({

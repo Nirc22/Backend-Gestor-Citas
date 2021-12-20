@@ -4,25 +4,35 @@ const Cita = require('../models/Cita');
 const Cupo = require('../models/Cupo');
 
 const getCita = async (req, resp = response) => {
-    const citas = await Cita.find()
-                            .populate('idSede')
-                            .populate('tipoCita')
 
-    resp.status(200).json({
-        ok: true,
-        msg: 'Lista de Citas',
-        citas
-    });
+    try {
+        const citas = await Cita.find()
+                                    .populate('idSede')
+                                    .populate('tipoCita')
+
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de Citas',
+            citas
+        });
+    }
+    catch(error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al listar citas',
+        });
+    }
 }
 
 const crearCita = async (req, resp = response) => { 
-    
-    const cita = new Cita(req.body);
-    const { idCupo } = req.body;
-    console.log(cita);
 
     try {
+        const cita = new Cita(req.body);
+        const { idCupo } = req.body;
+
         let citas = await Cita.findOne({idCupo});
+
         if(citas){
             return resp.status(400).json({
                 ok: false,
@@ -32,9 +42,8 @@ const crearCita = async (req, resp = response) => {
         const citaSave = await cita.save();
         
         let cupo = await Cupo.findById( idCupo );
-        console.log(cupo);
-        // await Cupo.findByIdAndUpdate( cupo, { estado: false } );
         cupo.estado = !cupo.estado;
+
         await Cupo.findByIdAndUpdate(idCupo, cupo, {new: true});
 
         resp.status(201).json({
@@ -43,7 +52,7 @@ const crearCita = async (req, resp = response) => {
             citaSave
         });
 
-    } catch (error) {
+    } catch(error) {
         console.log(error);
         resp.status(500).json({
             ok: false,
@@ -53,11 +62,9 @@ const crearCita = async (req, resp = response) => {
 }
 
 const actualizarCita = async (req, resp = response) => { 
-    
-    const citaId = req.params.id;
 
     try {
-        
+        const citaId = req.params.id;
         const cita = await Cita.findById(citaId);
 
         if(!cita) {
@@ -69,14 +76,14 @@ const actualizarCita = async (req, resp = response) => {
 
         const citaActualizada = await Cita.findByIdAndUpdate(citaId, req.body, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Cita actualizada de manera exitosa',
             cita: citaActualizada
         });
 
 
-    } catch (error) {
+    } catch(error) {
         console.log(error);
         resp.status(500).json({
             ok: false,
@@ -86,11 +93,9 @@ const actualizarCita = async (req, resp = response) => {
 }
 
 const eliminarCita = async (req, resp = response) => { 
-    
-    const citaId = req.params.id;
 
     try {
-        
+        const citaId = req.params.id;
         const cita = await Cita.findById(citaId);
 
         if(!cita) {
@@ -102,13 +107,13 @@ const eliminarCita = async (req, resp = response) => {
 
         await Cita.findByIdAndDelete(citaId);
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Cita eliminada de manera exitosa'
         });
 
 
-    } catch (error) {
+    } catch(error) {
         console.log(error);
         resp.status(500).json({
             ok: false,

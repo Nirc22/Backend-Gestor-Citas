@@ -40,11 +40,6 @@ const OdontologoSchema = Schema({
         ref: 'Especializacion',
         required: true 
     },
-    idCupo:{
-        type: Schema.Types.ObjectId,
-        ref: 'cupo',
-        required: true 
-    },
     idSede:{
         type: Schema.Types.ObjectId,
         ref: 'sede',

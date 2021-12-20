@@ -8,15 +8,6 @@ const CupoSchema = Schema({
     horaFin: {
         type: Date,
         required: true
-    },
-    estado: {
-        type: Boolean,
-        default: true
-    },
-    idHorario: {
-        type: Schema.Types.ObjectId,
-        ref: 'horario',
-        required: true 
     }
 });
 
