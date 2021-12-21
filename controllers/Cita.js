@@ -3,12 +3,16 @@ const { response } = require('express');
 const Cita = require('../models/Cita');
 const Cupo = require('../models/Cupo');
 
+/* Listar citas*/
 const getCita = async (req, resp = response) => {
 
     try {
         const citas = await Cita.find()
-                                    .populate('idSede')
-                                    .populate('tipoCita')
+                                    .populate('idCupo')
+                                    .populate('idSede', 'nombre')
+                                    .populate('tipoCita','nombre')
+                                    .populate('idOdontologo',['nombre','apellidos','idEspecializacion'])
+                                    .populate('idCliente', ['nombre','apellidos','email','telefono','documento','fechaNacimiento'])
 
         resp.status(200).json({
             ok: true,
@@ -25,6 +29,7 @@ const getCita = async (req, resp = response) => {
     }
 }
 
+/* Crear Citas */
 const crearCita = async (req, resp = response) => { 
 
     try {

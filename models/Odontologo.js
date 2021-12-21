@@ -37,7 +37,7 @@ const OdontologoSchema = Schema({
     },
     idEspecializacion:{
         type: Schema.Types.ObjectId,
-        ref: 'Especializacion',
+        ref: 'especializacion',
         required: true 
     },
     idSede:{

@@ -4,11 +4,13 @@ const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/generar-jwt');
 
+
+/* Crear Usuario*/
 const crearUsuario = async (req, resp = response) => {
     
-    const { email, password, documento } = req.body;
-    // Falta odontólogo
     try {
+        const { email, password, documento } = req.body;
+
         let usuario = await Usuario.findOne({ documento });
         let usuario2 = await Usuario.findOne({ email});
         if (usuario) {
@@ -46,10 +48,12 @@ const crearUsuario = async (req, resp = response) => {
     }
 }
 
+/*  Login  */
 const loginUsuario = async (req, resp = response) => {
-    const { email, password } = req.body;
 
     try {
+        const { email, password } = req.body;
+
         //confirmar email
         let usuario = await Usuario.findOne({ email });
 
@@ -57,7 +61,7 @@ const loginUsuario = async (req, resp = response) => {
 
         if (!usuario) {
             resp.status(400).json({
-                ok: true,
+                ok: false,
                 msg: 'Usuario o contraseña erradas'
             });
         }
@@ -67,7 +71,7 @@ const loginUsuario = async (req, resp = response) => {
         
         if (!validPassword) {
             resp.status(400).json({
-                ok: true,
+                ok: false,
                 msg: 'Usuario o contraseña erradas'
             });
         }
@@ -77,7 +81,7 @@ const loginUsuario = async (req, resp = response) => {
         
         resp.json({
             ok: true,
-            msg: 'Ok',
+            msg: 'Sesión Iniciada',
             uid: usuario.id,
             name: usuario.name,
             token
@@ -91,6 +95,7 @@ const loginUsuario = async (req, resp = response) => {
     }
 }
 
+/* Falta hacer Logout */
 const logoutUsuario = async (req, resp = response) => {
 
     /*
@@ -157,7 +162,7 @@ const actualizarPassword = async (req, resp = response) => {
         resp.json({
             ok: true,
             msg: 'Contraseña actualizada de manera exitosa',
-            usuario: passwordUpdate
+            //usuario: passwordUpdate
         });
 
     } catch (error) {

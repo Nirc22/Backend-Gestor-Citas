@@ -1,11 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const UsuarioSchema = Schema({
-    name: {
+    nombre: {
         type: String,
         required: true
     },
-    apellido:{
+    apellidos:{
         type: String,
         required: true
     },
@@ -33,8 +33,9 @@ const UsuarioSchema = Schema({
     },
     rol:{
         type: Schema.Types.ObjectId,
-        ref: 'Rol',
-        required: true 
+        ref: 'rol',
+        required: true,
+        default: '61b0b72e0d037f1278c80f01'
     },
     estado: {
         type: Boolean,

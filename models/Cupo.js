@@ -2,11 +2,11 @@ const { Schema, model } = require('mongoose');
 
 const CupoSchema = Schema({
     horaInicio: {
-        type: Date,
+        type: String,
         required: true,
     },
     horaFin: {
-        type: Date,
+        type: String,
         required: true
     }
 });
