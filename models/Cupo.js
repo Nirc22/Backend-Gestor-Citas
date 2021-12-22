@@ -2,22 +2,12 @@ const { Schema, model } = require('mongoose');
 
 const CupoSchema = Schema({
     horaInicio: {
-        type: Date,
+        type: String,
         required: true,
-        unique: true
     },
     horaFin: {
-        type: Date,
-        required: true
-    },
-    estado: {
         type: String,
-        default: true
-    },
-    idHorario: {
-        type: Schema.Types.ObjectId,
-        ref: 'Horario',
-        required: true 
+        required: true
     }
 });
 

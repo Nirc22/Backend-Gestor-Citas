@@ -28,8 +28,16 @@ const getSede = async (req, resp = response) => {
 const crearSede = async (req, resp) => {
 
     const sede = new Sede(req.body);
+    const { nombre } = req.body;
 
     try {
+        let sedes = await Sede.findOne({nombre});
+        if(sedes){
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Ya existe una sede con ese nombre'
+            })
+        }
         const sedeSave = await sede.save();
         resp.status(201).json({
             ok: true,

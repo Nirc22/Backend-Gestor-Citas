@@ -27,18 +27,17 @@ const OdontologoSchema = Schema({
         type: Date,
         required: true
     },
+    password:{
+        type: String,
+        required: true
+    },
     estado: {
         type: Boolean,
         default: true
     },
     idEspecializacion:{
         type: Schema.Types.ObjectId,
-        ref: 'Especializacion',
-        required: true 
-    },
-    idHorario:{
-        type: Schema.Types.ObjectId,
-        ref: 'Horario',
+        ref: 'especializacion',
         required: true 
     },
     idSede:{

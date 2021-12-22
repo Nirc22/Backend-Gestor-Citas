@@ -5,23 +5,30 @@ const HistoriaClinica = require('../models/HistoriaClinica');
 /**getHClinica */
 
 const getHClinica = async (req, resp = response) => {
-
-    const hClinica = await HistoriaClinica.find();
-    resp.status(200).json({
-        ok: true,
-        msg: 'Lista de historias clinicas',
-        hClinica
-    });
+   
+    try {
+        const hClinica = await HistoriaClinica.find();
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de historias clinicas',
+            hClinica
+        });
+    }
+    catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al listar historias clinicas',
+        });
+    }
 
 }
 /**crearHClinica */
 
 const crearHClinica = async (req, resp = response) => {
 
-    const hClinica = new HistoriaClinica(req.body);
-    //console.log(hClinica)
-
     try {
+        const hClinica = new HistoriaClinica(req.body);
         const hClinicaSave = await hClinica.save();
         resp.status(201).json({
             ok: true,
@@ -33,7 +40,7 @@ const crearHClinica = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'error al crear la historia clinica',
+            msg: 'Error al crear la historia clinica',
         });
     }
 }
@@ -42,10 +49,8 @@ const crearHClinica = async (req, resp = response) => {
 
 const actualizarHClinica = async (req, resp = response) => {
 
-    const hClinicaId = req.params.id;
-
     try {
-
+        const hClinicaId = req.params.id;
         const hClinica = await HistoriaClinica.findById(hClinicaId);
 
         if (!hClinica) {
@@ -57,7 +62,7 @@ const actualizarHClinica = async (req, resp = response) => {
 
         const HclinicaActualizada = await HistoriaClinica.findByIdAndUpdate(hClinicaId, req.body, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'historia clinica actualizada de manera exitosa',
             hclinica: HclinicaActualizada

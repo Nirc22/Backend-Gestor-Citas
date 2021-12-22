@@ -1,6 +1,7 @@
 const {response, request} = require('express');
 
 const jwt = require('jsonwebtoken');
+const Odontologo = require('../models/Odontologo');
 const Usuario = require('../models/Usuario');
 
 const validarJWT = async (req = request, res = response, next) => {
@@ -25,16 +26,30 @@ const validarJWT = async (req = request, res = response, next) => {
 
         //Leer el usuario que corresponde al uid
         const usuario = await Usuario.findById(uid);
+        const odontologo = await Odontologo.findById(uid);
 
-        if(!usuario) {
-            return res.status(401).json({
-                ok: true,
-                msg: 'Token no valido'
-            })
+        //Buscar si existe odontólogo y si existe mirar si está activo
+        if(usuario) {
+            req.usuario = usuario;
+
+        }else{
+            if(odontologo){
+                if(!odontologo.estado){
+                    res.status(401).json({
+                        ok: false,
+                        msg: 'Odontólogo inactivo'
+                    })
+                }
+                req.odontologo = odontologo;
+            }else{
+                res.status(401).json({
+                    ok: false,
+                    msg: 'Token no valido'
+                })
+            }
         }
 
-        req.usuario = usuario;
-        next();
+
     } catch (error) {
         console.log(error);
         return res.status(401).json({

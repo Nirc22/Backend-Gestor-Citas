@@ -4,27 +4,27 @@ const {Schema, model, isValidObjectId} = require('mongoose');
 const CitaSchema = Schema({
     idCliente:{
         type: Schema.Types.ObjectId,
-        ref: 'Usuario',
+        ref: 'usuario',
         required: true    
     },
     idCupo:{
         type: Schema.Types.ObjectId,
-        ref: 'Cupo',
+        ref: 'cupo',
         required: true
     },
     idSede:{
         type: Schema.Types.ObjectId,
-        ref: 'Sede',
+        ref: 'sede',
         required: true
     },
     idOdontologo:{
         type: Schema.Types.ObjectId,
-        ref: 'Odontologo',
+        ref: 'odontologo',
         required: true
     },
     tipoCita:{
         type: Schema.Types.ObjectId,
-        ref: 'TipoCita',
+        ref: 'tipoCita',
         required: true
     }
 });

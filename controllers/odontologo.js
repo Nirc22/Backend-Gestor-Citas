@@ -1,6 +1,26 @@
 const { response } = require('express');
 const Odontologo = require('../models/Odontologo');
 
+/**getOdontologoById */
+
+const getOdontologoById = async (req, resp = response) => {
+    try {
+        const {id} = req.params;
+        const odontologo = await Odontologo.findById(id);
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de odontologos',
+            odontologo
+        });
+        
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'error al listar odontologos',
+        });
+    }
+}
 
 /**getOdontologo */
 
@@ -18,7 +38,7 @@ const getOdontologo = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'error al crear odontologos',
+            msg: 'error al listar odontologos',
         });
     }
 }
@@ -28,12 +48,25 @@ const getOdontologo = async (req, resp = response) => {
 const crearOdontologo = async (req, resp) => {
 
     const odontologo = new Odontologo(req.body);
-    console.log(odontologo);
-    console.log(req.body);
-    //return;
+    const {email, documento } = req.body;
 
 
-    try {
+
+    try { 
+        let odonto = await Odontologo.findOne({documento});
+        let odonto2 = await Odontologo.findOne({email});
+        if (odonto) {
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Ya existe un odontologo registrado con ese documento'
+            })
+        }
+        if(odonto2){
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Ya existe un odontologo registrado con ese email'
+            })
+        }
         const odontologoSave = await odontologo.save();
         resp.status(201).json({
             ok: true,
@@ -86,6 +119,7 @@ const actualizarOdontologo = async (req, resp = response) => {
 
 
 module.exports = {
+    getOdontologoById,
     getOdontologo,
     crearOdontologo,
     actualizarOdontologo

@@ -31,7 +31,12 @@ router.post(
 
 router.get('/logout', logoutUsuario);
 
-router.put('/actualizar/password', validarJWT ,actualizarPassword);
+router.put('/actualizar/password',
+[
+    check('password', 'El password debe ser de 6 caracteres').isLength({min:6}),
+    validarCampos
+],
+ validarJWT ,actualizarPassword);
 
 router.post('/renew', revalidarToken);
 

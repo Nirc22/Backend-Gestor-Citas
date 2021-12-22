@@ -1,32 +1,63 @@
 const { response } = require('express');
 
 const Cita = require('../models/Cita');
+const Cupo = require('../models/Cupo');
 
+/* Listar citas*/
 const getCita = async (req, resp = response) => {
-    const citas = await Cita.find()
-                            .populate('idSede')
-                            .populate('tipoCita')
-
-    resp.status(200).json({
-        ok: true,
-        msg: 'Lista de Citas',
-        citas
-    });
-}
-
-const crearCita = async (req, resp = response) => { 
-    
-    const cita = new Cita(req.body);
 
     try {
+        const citas = await Cita.find()
+                                    .populate('idCupo')
+                                    .populate('idSede', 'nombre')
+                                    .populate('tipoCita','nombre')
+                                    .populate('idOdontologo',['nombre','apellidos','idEspecializacion'])
+                                    .populate('idCliente', ['nombre','apellidos','email','telefono','documento','fechaNacimiento'])
+
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de Citas',
+            citas
+        });
+    }
+    catch(error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al listar citas',
+        });
+    }
+}
+
+/* Crear Citas */
+const crearCita = async (req, resp = response) => { 
+
+    try {
+        const cita = new Cita(req.body);
+        const { idCupo } = req.body;
+
+        let citas = await Cita.findOne({idCupo});
+
+        if(citas){
+            return resp.status(400).json({
+                ok: false,
+                msg: 'No hay cupo'
+            })
+        }
         const citaSave = await cita.save();
+        
+        let cupo = await Cupo.findById( idCupo );
+        cupo.estado = !cupo.estado;
+
+        await Cupo.findByIdAndUpdate(idCupo, cupo, {new: true});
+
         resp.status(201).json({
             ok: true,
             msg: 'Cita creada de manera exitosa',
             citaSave
         });
 
-    } catch (error) {
+    } catch(error) {
         console.log(error);
         resp.status(500).json({
             ok: false,
@@ -36,11 +67,9 @@ const crearCita = async (req, resp = response) => {
 }
 
 const actualizarCita = async (req, resp = response) => { 
-    
-    const citaId = req.params.id;
 
     try {
-        
+        const citaId = req.params.id;
         const cita = await Cita.findById(citaId);
 
         if(!cita) {
@@ -52,14 +81,14 @@ const actualizarCita = async (req, resp = response) => {
 
         const citaActualizada = await Cita.findByIdAndUpdate(citaId, req.body, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Cita actualizada de manera exitosa',
             cita: citaActualizada
         });
 
 
-    } catch (error) {
+    } catch(error) {
         console.log(error);
         resp.status(500).json({
             ok: false,
@@ -69,11 +98,9 @@ const actualizarCita = async (req, resp = response) => {
 }
 
 const eliminarCita = async (req, resp = response) => { 
-    
-    const citaId = req.params.id;
 
     try {
-        
+        const citaId = req.params.id;
         const cita = await Cita.findById(citaId);
 
         if(!cita) {
@@ -85,13 +112,13 @@ const eliminarCita = async (req, resp = response) => {
 
         await Cita.findByIdAndDelete(citaId);
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Cita eliminada de manera exitosa'
         });
 
 
-    } catch (error) {
+    } catch(error) {
         console.log(error);
         resp.status(500).json({
             ok: false,
