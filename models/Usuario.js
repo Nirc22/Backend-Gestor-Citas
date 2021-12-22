@@ -34,10 +34,6 @@ const UsuarioSchema = Schema({
     rol:{
         type: Schema.Types.ObjectId,
         ref: 'Rol',
-<<<<<<< HEAD
-        default:'61b0b72e0d037f1278c80f01',
-        required: true
-=======
         required: true 
     },
     estado: {
@@ -46,7 +42,6 @@ const UsuarioSchema = Schema({
     },
     idToken:{
         type: String
->>>>>>> CambiosStephania
     }
     // idToken:{
     //     type: String
