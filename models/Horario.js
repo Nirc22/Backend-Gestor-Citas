@@ -7,10 +7,9 @@ const HorarioSchema = Schema({
         required: true
     },
     idCupos:[{
-        cupos:{
+        cupo: {
             type: Schema.Types.ObjectId,
             ref: 'cupo',
-            required: true
         }
     }],
     idOdontologo:{
