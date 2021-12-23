@@ -86,7 +86,6 @@ const loginUsuario = async (req, resp = response) => {
             name: usuario.name,
             token
         });
-
     } catch (error) {
         resp.status(500).json({
             ok: false,
