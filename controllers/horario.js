@@ -5,7 +5,10 @@ const Horario = require('../models/Horario');
 const obtenerHorarios = async (req, resp = response) => {
 
     try{
-        const horarios = await Horario.find();
+        const horarios = await Horario.find().populate('idOdontologo').populate({
+            path: 'idCupos.cupo',
+            model: 'cupo'
+        });
         resp.status(200).json({
             ok: true,
             msg: 'Lista de Horarios',

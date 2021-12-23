@@ -1,10 +1,10 @@
 const { Schema, model, } = require('mongoose');
 
-const PerfilSchema = Schema({
+const DiaSchema = Schema({
     nombre: {
         type: String,
         required: true
     }
 });
 
-module.exports = model('dia', PerfilSchema)
+module.exports = model('dia', DiaSchema)
