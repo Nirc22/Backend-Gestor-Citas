@@ -8,8 +8,8 @@ const router = Router();
 router.post(
     '/crear', 
     [
-        check('name','EL nombre es obligatorio').not().isEmpty().trim(),
-        check('apellido','EL apellido es obligatorio').not().isEmpty().trim(),
+        check('nombre','EL nombre es obligatorio').not().isEmpty().trim(),
+        check('apellidos','EL apellido es obligatorio').not().isEmpty().trim(),
         check('email', 'El email es obligatorio').isEmail(),
         check('telefono','El telefono debe ser de 10 caracteres').isLength({min:10}),
         check('documento','El documenot debe tener al menos 7 caracteres').isLength({min:7}),

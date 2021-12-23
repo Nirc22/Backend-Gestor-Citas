@@ -4,19 +4,18 @@ const router = Router();
 
 
 const { validarJWT } = require('../middlewares/validar-jwt');
+const { AdminRole } = require('../middlewares/validar-roles');
 
 //Controllers
 const { getOdontologo, crearOdontologo, actualizarOdontologo, getOdontologoById, } = require('../controllers/odontologo');
 const { validarCampos } = require('../middlewares/validar-campos');
 
-//Aplicar validación a todas las rutas
-router.use(validarJWT);
 
 //Rutas
 
-router.get('/', getOdontologo);
+router.get('/', validarJWT, getOdontologo);
 
-router.get('/:id', getOdontologoById);
+router.get('/:id', validarJWT, getOdontologoById);
 
 router.post(
     '/create', 
@@ -32,6 +31,8 @@ router.post(
         check('idSede','El id de la sede es obligatoria').not().notEmpty(),
         validarCampos
     ],
+    validarJWT,
+    AdminRole,
     crearOdontologo);
 
 router.put(
@@ -48,8 +49,9 @@ router.put(
         check('idSede','El id de la sede es obligatoria').not().notEmpty(),
         validarCampos
     ],
+    validarJWT,
+    AdminRole,
     actualizarOdontologo);
-
 
 
 module.exports = router;

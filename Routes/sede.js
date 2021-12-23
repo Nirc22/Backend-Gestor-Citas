@@ -3,17 +3,16 @@ const router = Router();
 const { check } = require('express-validator');
 
 const { validarJWT } = require('../middlewares/validar-jwt');
+const { AdminRole } = require('../middlewares/validar-roles');
 
 //Controllers
 const { getSede, crearSede, actualizarSede, } = require('../controllers/sede');
 const { validarCampos } = require('../middlewares/validar-campos');
 
-//Aplicar validación a todas las rutas
-router.use(validarJWT);
 
 //Rutas
 
-router.get('/', getSede);
+router.get('/', validarJWT, getSede);
 
 router.post(
     '/create', 
@@ -25,6 +24,8 @@ router.post(
         check('estado','El estado de la sede es obligatorio').not().isEmpty(),
         validarCampos
     ],
+    validarJWT,
+    AdminRole,
     crearSede);
 
 router.put(
@@ -37,8 +38,8 @@ router.put(
         check('estado','El estado de la sede es obligatorio').not().isEmpty(),
         validarCampos
     ],
+    validarJWT,
+    AdminRole,
     actualizarSede);
-
-
 
 module.exports = router;

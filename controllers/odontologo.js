@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Odontologo = require('../models/Odontologo');
+const bcrypt = require('bcryptjs');
 
 /**getOdontologoById */
 
@@ -46,11 +47,7 @@ const getOdontologo = async (req, resp = response) => {
 /**crearOdontologo */
 
 const crearOdontologo = async (req, resp) => {
-
-    const odontologo = new Odontologo(req.body);
-    const {email, documento } = req.body;
-
-
+    const {email, documento, password } = req.body;
 
     try { 
         let odonto = await Odontologo.findOne({documento});
@@ -67,7 +64,14 @@ const crearOdontologo = async (req, resp) => {
                 msg: 'Ya existe un odontologo registrado con ese email'
             })
         }
+        let odontologo = new Odontologo(req.body);
+
+        //Encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        odontologo.password = bcrypt.hashSync(password, salt);
+
         const odontologoSave = await odontologo.save();
+
         resp.status(201).json({
             ok: true,
             msg: 'Odontologo creado exitosamente',
