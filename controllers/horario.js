@@ -7,7 +7,7 @@ const obtenerHorarios = async (req, resp = response) => {
     try{
         const horarios = await Horario.find()
                                         //.populate('dia')
-                                        .populate('idOdontologo');
+                                        //.populate('idOdontologo');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de Horarios',
