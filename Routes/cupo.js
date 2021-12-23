@@ -4,12 +4,11 @@ const router = Router();
 
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { validarCampos } = require('../middlewares/validar-campos');
+const { AdminOrOdontoRole } = require('../middlewares/validar-roles');
 
 // Controlador
 const { obtenerCupoById, obtenerCupos, crearCupo, actualizarCupo, eliminarCupo } = require('../controllers/cupo');
 
-//Aplicar validación a todas las rutas
-router.use(validarJWT);
 
 // Rutas
 
@@ -17,7 +16,7 @@ router.use(validarJWT);
 router.get('/', obtenerCupos);
 
 // Obtener cupos por idHorario
-router.get('/:id', obtenerCupoById);
+router.get('/:id',validarJWT, obtenerCupoById);
 
 // Crear cupo
 router.post('/create',
@@ -26,6 +25,8 @@ router.post('/create',
         check('horaFin','la hora es obligatoria').not().isEmpty()
     ],
     validarCampos,
+    validarJWT, 
+    AdminOrOdontoRole,
     crearCupo
 );
 
@@ -36,10 +37,13 @@ router.put('/update/:id',
         check('horaFin','la hora es obligatoria').not().isEmpty()
     ],
     validarCampos,
+    validarJWT, 
+    AdminOrOdontoRole,
     actualizarCupo
 );
 
 // Eliminar cupo
-router.delete('/delete/:id', eliminarCupo);
+router.delete('/delete/:id', validarJWT, AdminOrOdontoRole, eliminarCupo);
+
 
 module.exports = router;

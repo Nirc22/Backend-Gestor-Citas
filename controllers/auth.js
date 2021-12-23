@@ -2,6 +2,7 @@ const { response } = require('express');
 const bcrypt = require('bcryptjs');
 
 const Usuario = require('../models/Usuario');
+const Odontologo = require('../models/Odontologo');
 const { generarJWT } = require('../helpers/generar-jwt');
 
 

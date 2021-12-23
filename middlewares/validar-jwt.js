@@ -10,7 +10,7 @@ const validarJWT = async (req = request, res = response, next) => {
     token = req.headers['x-access-token'] || req.headers['authorization'];
 
     if(!token) {
-        res.status(401).json({
+        return res.status(401).json({
             ok: false,
             msg: 'No hay token en la petición'
         });
@@ -48,17 +48,14 @@ const validarJWT = async (req = request, res = response, next) => {
                 })
             }
         }
-
-
+        next();
     } catch (error) {
         console.log(error);
-        res.status(401).json({
+        return res.status(401).json({
             ok: false,
             msg: 'Token no valido'
         });
     }
-
-    next();
 }
 
 module.exports = {

@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Odontologo = require('../models/Odontologo');
+const bcrypt = require('bcryptjs');
 
 /**getOdontologoById */
 
