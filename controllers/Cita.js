@@ -2,6 +2,7 @@ const { response } = require('express');
 
 const Cita = require('../models/Cita');
 const Cupo = require('../models/Cupo');
+const Horario = require('../models/Horario');
 
 /* Listar citas*/
 const getCita = async (req, resp = response) => {
@@ -34,11 +35,12 @@ const crearCita = async (req, resp = response) => {
 
     try {
         const cita = new Cita(req.body);
-        const { idCupo } = req.body;
+        const { idCupo, idOdontologo,idDia } = req.body;
 
-        let citas = await Cita.findOne({idCupo});
+        let citas = await Cita.findOne({idCupo,idOdontologo});
+        console.log(citas);
 
-        if(citas){
+       /* if(citas){
             return resp.status(400).json({
                 ok: false,
                 msg: 'No hay cupo'
@@ -55,7 +57,7 @@ const crearCita = async (req, resp = response) => {
             ok: true,
             msg: 'Cita creada de manera exitosa',
             citaSave
-        });
+        });*/
 
     } catch(error) {
         console.log(error);

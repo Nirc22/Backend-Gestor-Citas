@@ -5,7 +5,7 @@ const Cupo = require('../models/Cupo');
 const obtenerCupos = async (req, resp = response) => {
     
     try {
-        const cupos = await Cupo.find().populate('idHorario');
+        const cupos = await Cupo.find();
         resp.status(200).json({
             ok: true,
             msg: 'Lista de Cupos',
@@ -21,16 +21,16 @@ const obtenerCupos = async (req, resp = response) => {
     }
 }
 
-const obtenerCupo = async (req, resp = response) => {
+const obtenerCupoById = async (req, resp = response) => {
 
     try {
-        const idHorario = req.params.id;
-        const cupo = await Cupo.find({idHorario}).populate('idHorario');
+        const cupoId = req.params.id;
+        const cupo = await Cupo.findById(cupoId);
 
         if(!cupo){
             resp.status(404).json({
                 ok: false,
-                msg: 'El id del horario no coincide con ningun elemento en la base de datos'
+                msg: 'El id no coincide con ningun elemento en la base de datos'
             });
         }
         resp.status(200).json({
@@ -129,7 +129,7 @@ const eliminarCupo = async (req, resp = response) => {
 } 
 
 module.exports = {
-    obtenerCupo,
+    obtenerCupoById,
     obtenerCupos,
     crearCupo,
     actualizarCupo,

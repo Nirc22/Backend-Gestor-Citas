@@ -5,7 +5,9 @@ const Horario = require('../models/Horario');
 const obtenerHorarios = async (req, resp = response) => {
 
     try{
-        const horarios = await Horario.find();
+        const horarios = await Horario.find()
+                                        //.populate('dia')
+                                        .populate('idOdontologo');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de Horarios',
@@ -21,17 +23,19 @@ const obtenerHorarios = async (req, resp = response) => {
 }
 
 const obtenerHorario = async (req, resp = response) => {
-    const horarioId = req.params.id;
-    const horario = await Horario.findById(horarioId);
-
-    if(!horario){
-        resp.status(404).json({
-            ok: false,
-            msg: 'El id del horario no coincide con ningun elemento en la base de datos'
-        });
-    }
 
     try{
+        const horarioId = req.params.id;
+        const horario = await Horario.findById(horarioId)
+                                                    .populate('dia')
+                                                    .populate('idOdontologo');
+    
+        if(!horario){
+            resp.status(404).json({
+                ok: false,
+                msg: 'El id del horario no coincide con ningun elemento en la base de datos'
+            });
+        }
         resp.status(200).json({
             ok: true,
             msg: 'Horario por Id',
@@ -50,6 +54,7 @@ const crearHorario = async (req, resp = response) => {
     try {
         const horario = new Horario(req.body);
         const horarioSave = await horario.save();
+
         resp.status(201).json({
             ok: true,
             msg: 'Horario creado de manera exitosa',

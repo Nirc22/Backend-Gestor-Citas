@@ -1,9 +1,12 @@
+const { check } = require('express-validator');
 const { Router } = require('express');
 const router = Router();
+
 const { validarJWT } = require('../middlewares/validar-jwt');
+const { validarCampos } = require('../middlewares/validar-campos');
 
 // Controlador
-const { obtenerCupo, obtenerCupos, crearCupo, actualizarCupo, eliminarCupo } = require('../controllers/cupo');
+const { obtenerCupoById, obtenerCupos, crearCupo, actualizarCupo, eliminarCupo } = require('../controllers/cupo');
 
 //Aplicar validación a todas las rutas
 router.use(validarJWT);
@@ -11,18 +14,32 @@ router.use(validarJWT);
 // Rutas
 
 // Obtener cupos
-router.get('/listar', obtenerCupos);
+router.get('/', obtenerCupos);
 
 // Obtener cupos por idHorario
-router.get('/listar/:id', obtenerCupo);
+router.get('/:id', obtenerCupoById);
 
 // Crear cupo
-router.post('/crear', crearCupo);
+router.post('/create',
+    [
+        check('horaInicio','la hora es obligatoria').not().isEmpty(),
+        check('horaFin','la hora es obligatoria').not().isEmpty()
+    ],
+    validarCampos,
+    crearCupo
+);
 
 // Actualizar cupo
-router.put('/actualizar/:id', actualizarCupo);
+router.put('/update/:id',
+    [
+        check('horaInicio','la hora es obligatoria').not().isEmpty(),
+        check('horaFin','la hora es obligatoria').not().isEmpty()
+    ],
+    validarCampos,
+    actualizarCupo
+);
 
 // Eliminar cupo
-router.delete('/eliminar/:id', eliminarCupo);
+router.delete('/delete/:id', eliminarCupo);
 
 module.exports = router;

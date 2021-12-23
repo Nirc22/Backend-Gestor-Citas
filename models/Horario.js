@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const HorarioSchema = Schema({
-    Dia: {
+    dia: {
         type: Schema.Types.ObjectId,
         ref: 'dia',
         required: true

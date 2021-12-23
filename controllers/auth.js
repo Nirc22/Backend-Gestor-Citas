@@ -175,6 +175,38 @@ const actualizarPassword = async (req, resp = response) => {
 
 }
 
+const actualizarUsuario = async (req, resp = response) => {
+
+    const usuarioId = req.params.id;
+
+    try {
+        
+        const usuario = await Odontologo.findById(usuarioId);
+
+        if(!usuario) {
+            resp.status(404).json({
+                ok: false,
+                msg: 'El id no coincide con ningun registro en la base de datos',
+            });
+        }
+        const usuarioActualizado = await Odontologo.findByIdAndUpdate(usuarioId, req.body, {new: true});
+
+        resp.json({
+            ok: true,
+            msg: 'Usuario actualizado exitosamente',
+            usuario: usuarioActualizado
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'error al actualizar usuario',
+        });
+    }
+}
+
 
 const revalidarToken = async (req, resp = response) => {
 
@@ -193,5 +225,6 @@ module.exports = {
     loginUsuario,
     logoutUsuario,
     revalidarToken,
+    actualizarUsuario,
     actualizarPassword
 }

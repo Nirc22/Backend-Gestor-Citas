@@ -5,6 +5,11 @@ const PerfilSchema = Schema({
         type: String,
         required: true
     }
-});
+  
+},
+    {
+        collection: 'dias'
+    }
+);
 
 module.exports = model('dia', PerfilSchema)

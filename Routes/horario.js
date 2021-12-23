@@ -11,18 +11,18 @@ router.use(validarJWT);
 // Rutas
 
 // Obtener Horarios
-router.get('/listar', obtenerHorarios);
+router.get('/', obtenerHorarios);
 
 // Obtener Horario
-router.get('/listar/:id', obtenerHorario);
+router.get('/:id', obtenerHorario);
 
 // Crear Horario
-router.post('/crear', crearHorario);
+router.post('/create', crearHorario);
 
 // Actualizar Horario
-router.put('/actualizar/:id', actualizarHorario);
+router.put('/update/:id', actualizarHorario);
 
 // Eliminar Horario
-router.delete('/eliminar/:id', eliminarHorario);
+router.delete('/delete/:id', eliminarHorario);
 
 module.exports = router;

@@ -11,6 +11,11 @@ const CitaSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'cupo',
         required: true
+    },   
+    idDia: {
+        type: Schema.Types.ObjectId,
+        ref: 'dia',
+        required: true
     },
     idSede:{
         type: Schema.Types.ObjectId,

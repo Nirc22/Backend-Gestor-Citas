@@ -6,10 +6,10 @@ const Odontologo = require('../models/Odontologo');
 const getOdontologoById = async (req, resp = response) => {
     try {
         const {id} = req.params;
-        const odontologo = await Odontologo.findById(id);
+        const odontologo = await Odontologo.findById(id).populate('idEspecializacion');
         resp.status(200).json({
             ok: true,
-            msg: 'Lista de odontologos',
+            msg: 'Odontologo',
             odontologo
         });
         
@@ -17,7 +17,7 @@ const getOdontologoById = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'error al listar odontologos',
+            msg: 'error al listar odontologo',
         });
     }
 }
@@ -27,11 +27,13 @@ const getOdontologoById = async (req, resp = response) => {
 const getOdontologo = async (req, resp = response) => {
     try {
 
-        const odontologo = await Odontologo.find();
+        const odontologos = await Odontologo.find()
+                                            .populate('idEspecializacion')
+                                            .populate('idSede', 'nombre');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de odontologos',
-            odontologo
+            odontologos
         });
         
     } catch (error) {
@@ -47,12 +49,10 @@ const getOdontologo = async (req, resp = response) => {
 
 const crearOdontologo = async (req, resp) => {
 
-    const odontologo = new Odontologo(req.body);
-    const {email, documento } = req.body;
-
-
-
     try { 
+        const odontologo = new Odontologo(req.body);
+        const {email, documento, password } = req.body;
+
         let odonto = await Odontologo.findOne({documento});
         let odonto2 = await Odontologo.findOne({email});
         if (odonto) {
@@ -67,7 +67,12 @@ const crearOdontologo = async (req, resp) => {
                 msg: 'Ya existe un odontologo registrado con ese email'
             })
         }
+        //Encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        odontologo.password = bcrypt.hashSync(password, salt);
+
         const odontologoSave = await odontologo.save();
+        
         resp.status(201).json({
             ok: true,
             msg: 'Odontologo creado exitosamente',
@@ -116,11 +121,41 @@ const actualizarOdontologo = async (req, resp = response) => {
     }
 }
 
+const actualizarPassword = async (req, resp = response) => {
+
+    const {password} = req.body;
+    const odonAutenticado = req.usuario;
+
+    try {
+
+        //Encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        odonAutenticado.password = bcrypt.hashSync(password, salt);
+
+        const passwordUpdate = await Usuario.findByIdAndUpdate(odonAutenticado.id, odonAutenticado, { new: true });
+
+        resp.json({
+            ok: true,
+            msg: 'Contraseña actualizada de manera exitosa',
+            //usuario: passwordUpdate
+        });
+
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'error al actualizar la contraseña',
+        });
+    }
+
+}
+
 
 
 module.exports = {
     getOdontologoById,
     getOdontologo,
     crearOdontologo,
-    actualizarOdontologo
+    actualizarOdontologo,
+    actualizarPassword
 };
