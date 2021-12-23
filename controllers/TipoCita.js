@@ -2,8 +2,9 @@ const { response } = require('express');
 const TipoCita = require('../models/TipoCita');
 
 const getTipoCita = async (req, resp = response) => {
-    const tipoCitas = await TipoCita.find();
+   
     try{
+        const tipoCitas = await TipoCita.find().populate('nombre');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de tipo de citas',
@@ -19,11 +20,21 @@ const getTipoCita = async (req, resp = response) => {
 }
 
 const crearTipoCita = async (req, resp = response) => { 
-    
-    const tipoCita = new TipoCita(req.body);
 
     try {
+        const nombre = req.body.nombre;
+        let tipo = await TipoCita.findOne(nombre);
+
+        if(tipo){
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Ya existe un tipo de cita con ese nombre'
+            })
+        }
+
+        const tipoCita = new TipoCita(req.body);
         const tipoCitaSave = await tipoCita.save();
+
         resp.status(201).json({
             ok: true,
             msg: 'Tipo cita creada de manera exitosa',
@@ -40,11 +51,9 @@ const crearTipoCita = async (req, resp = response) => {
 }
 
 const actualizarTipoCita = async (req, resp = response) => { 
-    
-    const tipoCitaId = req.params.id;
 
     try {
-        
+        const tipoCitaId = req.params.id;
         const tipoCita = await TipoCita.findById(tipoCitaId);
 
         if(!tipoCita) {
@@ -56,7 +65,7 @@ const actualizarTipoCita = async (req, resp = response) => {
 
         const tipoCitaActualizada = await TipoCita.findByIdAndUpdate(tipoCitaId, req.body, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Tipo cita actualizada de manera exitosa',
             tipoCita: tipoCitaActualizada
@@ -73,11 +82,9 @@ const actualizarTipoCita = async (req, resp = response) => {
 }
 
 const eliminarTipoCita = async (req, resp = response) => { 
-    
-    const tipoCitaId = req.params.id;
 
     try {
-        
+        const tipoCitaId = req.params.id;
         const tipoCita = await TipoCita.findById(tipoCitaId);
 
         if(!tipoCita) {
@@ -89,7 +96,7 @@ const eliminarTipoCita = async (req, resp = response) => {
 
         await TipoCita.findByIdAndDelete(tipoCita);
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'El tipo cita eliminada de manera exitosa'
         });

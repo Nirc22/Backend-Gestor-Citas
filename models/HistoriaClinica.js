@@ -3,17 +3,17 @@ const { Schema, model } = require('mongoose');
 const H_ClinicaSchema = Schema({
     idUsuario:{
         type: Schema.Types.ObjectId,
-        ref: 'Usuario',
-        required: true 
+        ref: 'usuario',
+        required: [true, 'El usuario es obligatorio'] 
     },
     idCita:{
         type: Schema.Types.ObjectId,
-        ref: 'Cita',
-        required: true 
+        ref: 'cita',
+        required: [true, 'la cita es obligatoria'] 
     },
     observacion: {
-        type: String,
-        required: true
+        type: Array,
+        required: [true, 'la observación es obligatorio']
     },
 },
 {

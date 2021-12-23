@@ -106,7 +106,7 @@ const actualizarOdontologo = async (req, resp = response) => {
             });
         }
         const odontologoActualizado = await Odontologo.findByIdAndUpdate(odontologoId, req.body, {new: true});
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Odontologo actualizado exitosamente',
             odontologo: odontologoActualizado
@@ -135,7 +135,7 @@ const actualizarPassword = async (req, resp = response) => {
 
         const passwordUpdate = await Usuario.findByIdAndUpdate(odonAutenticado.id, odonAutenticado, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Contraseña actualizada de manera exitosa',
             //usuario: passwordUpdate

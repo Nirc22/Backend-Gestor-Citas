@@ -10,10 +10,10 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 //Aplicar validación a todas las rutas
 router.use(validarJWT);
 
-router.get('/listar', getTipoCita);
+router.get('/', getTipoCita);
 
 router.post(
-    '/crear', 
+    '/create', 
     [
         check('nombre','El nombre del tipo de cita es obligatorio').not().isEmpty(),
         validarCampos
@@ -21,13 +21,13 @@ router.post(
     crearTipoCita);
 
 router.put(
-    '/actualizar/:id', 
+    '/update/:id', 
     [
         check('nombre','El nombre del tipo de cita es obligatorio').not().isEmpty(),
         validarCampos
     ],
     actualizarTipoCita);
 
-router.delete('/eliminar/:id', eliminarTipoCita);
+router.delete('/delete/:id', eliminarTipoCita);
 
 module.exports = router;

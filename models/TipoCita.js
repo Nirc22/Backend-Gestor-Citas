@@ -3,7 +3,8 @@ const { Schema, model } = require('mongoose');
 const TipoCitaSchema = Schema({
     nombre: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     }
 },
 {

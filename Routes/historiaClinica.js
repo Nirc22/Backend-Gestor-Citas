@@ -19,7 +19,7 @@ router.post(
     '/create', 
     [
         check('idUsuario','El id del usuario es obligatorio').not().isEmpty(),
-        check('idCitaCliente','El id de la cita es obligatoria').not().isEmpty(),
+        check('idCita','El id de la cita es obligatoria').not().isEmpty(),
         check('observacion','Se debe ingresar una observacion del tratamiento realizado').not().isEmpty(),
         validarCampos
     ],
@@ -29,7 +29,7 @@ router.put(
     '/update/:id', 
     [
         check('idUsuario','El id del usuario es obligatorio').not().isEmpty(),
-        check('idCitaCliente','El id de la cita es obligatoria').not().isEmpty(),
+        check('idCita','El id de la cita es obligatoria').not().isEmpty(),
         check('observacion','Se debe ingresar una observacion del tratamiento realizado').not().isEmpty(),
         validarCampos
     ],

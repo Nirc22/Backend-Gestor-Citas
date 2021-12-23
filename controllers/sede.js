@@ -6,8 +6,9 @@ const Sede = require('../models/Sede');
 
 const getSede = async (req, resp = response) => {
 
-    const sedes = await Sede.find();
     try{
+        const sedes = await Sede.find();
+
         resp.status(200).json({
             ok: true,
             msg: 'Lista de sedes',
@@ -27,10 +28,10 @@ const getSede = async (req, resp = response) => {
 
 const crearSede = async (req, resp) => {
 
-    const sede = new Sede(req.body);
-    const { nombre } = req.body;
-
     try {
+        const sede = new Sede(req.body);
+        const { nombre } = req.body;
+
         let sedes = await Sede.findOne({nombre});
         if(sedes){
             return resp.status(400).json({
@@ -58,9 +59,10 @@ const crearSede = async (req, resp) => {
 
 const actualizarSede = async (req, resp = response) => {
 
-    const sedeId = req.params.id;
+ 
 
     try {
+        const sedeId = req.params.id;
 
         const sede = await Sede.findById(sedeId);
 

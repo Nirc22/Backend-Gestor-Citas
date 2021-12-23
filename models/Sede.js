@@ -9,22 +9,18 @@ const SedeSchema = Schema({
     direccion:{
         type: String,
         required: true,
-        unique: false
     },
     telefono: {
         type: Number,
         required: true,
-        unique: false
     },
     horario: {
         type: String,
         required: true,
-        unique: false
     },
     estado: {
         type: Boolean,
         default: true,
-        unique: false
     },
 
 },

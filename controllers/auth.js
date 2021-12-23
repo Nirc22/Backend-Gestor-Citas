@@ -105,6 +105,7 @@ const loginUsuario = async (req, resp = response) => {
                     msg: 'Sesión Iniciada',
                     uid: odontologo.id,
                     name: odontologo.nombre,
+                    especializacion: odontologo.idEspecializacion,
                     token
                 });
             }

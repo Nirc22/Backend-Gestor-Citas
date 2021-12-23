@@ -1,8 +1,6 @@
 const { response } = require('express');
 const Especializacion = require('../models/Especializacion');
 
-
-
 /**getEspecializacion */
 
 const getEspecializacion = async (req, resp = response) => {
@@ -34,7 +32,7 @@ const crearEspecializacion = async (req, resp) => {
         resp.status(201).json({
             ok: true,
             msg: 'Especializacion creada de manera exitosa',
-            especializacionSave
+            especializacion: especializacionSave
         });
 
     } catch (error) {

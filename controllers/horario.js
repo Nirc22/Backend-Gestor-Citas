@@ -1,14 +1,19 @@
 const { response } = require('express');
+const Dia = require('../models/Dia');
 
 const Horario = require('../models/Horario');
 
 const obtenerHorarios = async (req, resp = response) => {
 
     try{
-        const horarios = await Horario.find().populate('idOdontologo').populate({
-            path: 'idCupos.cupo',
-            model: 'cupo'
-        });
+        const horarios = await Horario.find()
+                                        .populate('dia')
+                                        .populate('idOdontologo')
+                                        .populate({
+                                                path: 'idCupos.cupo',
+                                                model: 'cupo'
+                                        });
+
         resp.status(200).json({
             ok: true,
             msg: 'Lista de Horarios',
@@ -29,8 +34,12 @@ const obtenerHorario = async (req, resp = response) => {
         const horarioId = req.params.id;
         const horario = await Horario.findById(horarioId)
                                                     .populate('dia')
-                                                    .populate('idOdontologo');
-    
+                                                    .populate('idOdontologo')
+                                                    .populate({
+                                                        path: 'idCupos.cupo',
+                                                        model: 'cupo'
+                                                    });
+
         if(!horario){
             resp.status(404).json({
                 ok: false,

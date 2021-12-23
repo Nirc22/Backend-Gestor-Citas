@@ -1,5 +1,8 @@
+const { check } = require('express-validator');
 const { Router } = require('express');
 const router = Router();
+
+const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 // Controlador
@@ -17,10 +20,26 @@ router.get('/', obtenerHorarios);
 router.get('/:id', obtenerHorario);
 
 // Crear Horario
-router.post('/create', crearHorario);
+router.post('/create',
+[
+    check('dia','El dia es obligatorio').not().isEmpty().trim(),
+    check('idCupos','El idCupos es obligatorio').not().isEmpty().trim(),
+    check('idOdontologo', 'El idOdontologo es obligatorio').not().isEmpty().trim()
+],
+    validarCampos,
+    crearHorario
+);
 
 // Actualizar Horario
-router.put('/update/:id', actualizarHorario);
+router.put('/update/:id',
+[
+    check('dia','El dia es obligatorio').not().isEmpty().trim(),
+    check('idCupos','El idCupos es obligatorio').not().isEmpty().trim(),
+    check('idOdontologo', 'El idOdontologo es obligatorio').not().isEmpty().trim()
+],
+    validarCampos,
+    actualizarHorario
+);
 
 // Eliminar Horario
 router.delete('/delete/:id', eliminarHorario);

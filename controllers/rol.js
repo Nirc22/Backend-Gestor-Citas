@@ -7,7 +7,7 @@ const Rol = require('../models/Rol');
 const getRol = async (req, resp = response) => {
     try {
 
-        const rol = await Rol.find();
+        const rol = await Rol.find().populate('nombre');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de roles',
@@ -65,7 +65,7 @@ const actualizarRol = async (req, resp = response) => {
 
         const rolActualizado = await Rol.findByIdAndUpdate(rolId, req.body, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Rol actualizado de manera exitosa',
             rol: rolActualizado

@@ -7,7 +7,9 @@ const HistoriaClinica = require('../models/HistoriaClinica');
 const getHClinica = async (req, resp = response) => {
    
     try {
-        const hClinica = await HistoriaClinica.find();
+        const hClinica = await HistoriaClinica.find()
+                                                .populate('idUsuario')
+                                                .populate( 'idCita');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de historias clinicas',
@@ -50,8 +52,9 @@ const crearHClinica = async (req, resp = response) => {
 const actualizarHClinica = async (req, resp = response) => {
 
     try {
-        const hClinicaId = req.params.id;
-        const hClinica = await HistoriaClinica.findById(hClinicaId);
+        const {id} = req.params;
+        const {observacion} = req.body;
+        const hClinica = await HistoriaClinica.findById(id);
 
         if (!hClinica) {
             resp.status(404).json({
@@ -60,7 +63,9 @@ const actualizarHClinica = async (req, resp = response) => {
             });
         }
 
-        const HclinicaActualizada = await HistoriaClinica.findByIdAndUpdate(hClinicaId, req.body, { new: true });
+        req.body.observacion = {...hClinica.observacion, observacion};
+        console.log(hClinica.observacion, observacion)
+        const HclinicaActualizada = await HistoriaClinica.findByIdAndUpdate(id, req.body, { new: true });
 
         resp.status(200).json({
             ok: true,
