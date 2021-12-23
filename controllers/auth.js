@@ -56,36 +56,59 @@ const loginUsuario = async (req, resp = response) => {
 
         //confirmar email
         let usuario = await Usuario.findOne({ email });
+        let odontologo = await Odontologo.findOne({ email });
 
-        //Falta mirar lo del odontólogo
-
-        if (!usuario) {
+        if (!usuario && !odontologo){
             resp.status(400).json({
                 ok: false,
                 msg: 'Usuario o contraseña erradas'
             });
         }
 
-        //confirmar contraseña
-        const validPassword = bcrypt.compareSync(password, usuario.password);
-        
-        if (!validPassword) {
-            resp.status(400).json({
-                ok: false,
-                msg: 'Usuario o contraseña erradas'
+        if(usuario){
+            //confirmar contraseña
+            const validPassword = bcrypt.compareSync(password, usuario.password);
+            
+            if (!validPassword) {
+                resp.status(400).json({
+                    ok: false,
+                    msg: 'Usuario o contraseña erradas'
+                });
+            }
+
+            const token = await generarJWT(usuario.id);
+
+            resp.json({
+                ok: true,
+                msg: 'Sesión Iniciada',
+                uid: usuario.id,
+                name: usuario.nombre,
+                token
             });
+        }else{
+            if(odontologo){
+                //confirmar contraseña
+                const validPassword = bcrypt.compareSync(password, odontologo.password);
+                
+                if (!validPassword) {
+                    resp.status(400).json({
+                        ok: false,
+                        msg: 'Usuario o contraseña erradas'
+                    });
+                }
+
+                const token = await generarJWT(odontologo.id);
+
+                resp.json({
+                    ok: true,
+                    msg: 'Sesión Iniciada',
+                    uid: odontologo.id,
+                    name: odontologo.nombre,
+                    token
+                });
+            }
         }
 
-        //generar token
-        const token = await generarJWT(usuario.id, usuario.name);
-        
-        resp.json({
-            ok: true,
-            msg: 'Sesión Iniciada',
-            uid: usuario.id,
-            name: usuario.name,
-            token
-        });
     } catch (error) {
         resp.status(500).json({
             ok: false,
