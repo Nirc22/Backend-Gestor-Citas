@@ -9,6 +9,7 @@ const { AdminRole } = require('../middlewares/validar-roles');
 const { getSede, crearSede, actualizarSede, } = require('../controllers/sede');
 const { validarCampos } = require('../middlewares/validar-campos');
 
+router.use(validarJWT);
 
 //Rutas
 
@@ -21,10 +22,8 @@ router.post(
         check('direccion','La direccion es obligatoria').not().isEmpty(),
         check('telefono','El telefono debe ser de 10 caracteres').isLength({min:10}),
         check('horario','El horario es obligatorio').not().isEmpty(),
-        check('estado','El estado de la sede es obligatorio').not().isEmpty(),
         validarCampos
     ],
-    validarJWT,
     AdminRole,
     crearSede);
 
@@ -35,10 +34,8 @@ router.put(
         check('direccion','La direccion es obligatoria').not().isEmpty(),
         check('telefono','El telefono debe ser de 10 caracteres').isLength({min:10}),
         check('horario','El horario es obligatorio').not().isEmpty(),
-        check('estado','El estado de la sede es obligatorio').not().isEmpty(),
         validarCampos
     ],
-    validarJWT,
     AdminRole,
     actualizarSede);
 

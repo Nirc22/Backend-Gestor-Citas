@@ -6,13 +6,14 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const { getEspecializacion, crearEspecializacion, actualizarEspecializacion, } = require('../controllers/especializacion');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { check } = require('express-validator');
+const { AdminRole } = require('../middlewares/validar-roles');
 
 //Aplicar validación a todas las rutas
 router.use(validarJWT);
 
 //Rutas
 
-router.get('/', getEspecializacion);
+router.get('/', AdminRole, getEspecializacion);
 
 router.post(
     '/create', 
@@ -20,6 +21,7 @@ router.post(
         check('nombre','El nombre de la especializacion es obligatoria').not().isEmpty(),
         validarCampos
     ],
+    AdminRole,
     crearEspecializacion);
 
 router.put(
@@ -28,6 +30,7 @@ router.put(
         check('nombre','El nombre de la especializacion es obligatoria').not().isEmpty(),
         validarCampos
     ],
+    AdminRole,
     actualizarEspecializacion);
 
 

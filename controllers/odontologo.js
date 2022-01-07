@@ -151,8 +151,6 @@ const actualizarPassword = async (req, resp = response) => {
 
 }
 
-
-
 module.exports = {
     getOdontologoById,
     getOdontologo,

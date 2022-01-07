@@ -7,19 +7,19 @@ const CitaSchema = Schema({
         ref: 'usuario',
         required: true    
     },
-    idCupo:{
+    idHorario:{
         type: Schema.Types.ObjectId,
-        ref: 'cupo',
+        ref: 'horario',
         required: true
     },   
-    idDia: {
-        type: Schema.Types.ObjectId,
-        ref: 'dia',
-        required: true
-    },
     idSede:{
         type: Schema.Types.ObjectId,
         ref: 'sede',
+        required: true
+    },
+    idCupo: {
+        type: Schema.Types.ObjectId,
+        ref: 'cupo',
         required: true
     },
     idOdontologo:{

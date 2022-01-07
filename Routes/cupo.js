@@ -4,7 +4,7 @@ const router = Router();
 
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { validarCampos } = require('../middlewares/validar-campos');
-const { AdminOrOdontoRole } = require('../middlewares/validar-roles');
+const { AdminRole } = require('../middlewares/validar-roles');
 
 // Controlador
 const { obtenerCupoById, obtenerCupos, crearCupo, actualizarCupo, eliminarCupo } = require('../controllers/cupo');
@@ -26,7 +26,7 @@ router.post('/create',
     ],
     validarCampos,
     validarJWT, 
-    AdminOrOdontoRole,
+    AdminRole,
     crearCupo
 );
 
@@ -38,12 +38,12 @@ router.put('/update/:id',
     ],
     validarCampos,
     validarJWT, 
-    AdminOrOdontoRole,
+    AdminRole,
     actualizarCupo
 );
 
 // Eliminar cupo
-router.delete('/delete/:id', validarJWT, AdminOrOdontoRole, eliminarCupo);
+router.delete('/delete/:id', validarJWT, AdminRole, eliminarCupo);
 
 
 module.exports = router;

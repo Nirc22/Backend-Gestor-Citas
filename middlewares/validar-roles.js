@@ -5,22 +5,53 @@ const Rol = require('../models/Rol');
 
 const AdminRole = async (req, res = response, next) => {
 
-    if(!req.usuario){
-        return res.status(500).json({
-            ok: false,
-            msg: 'Se quiere validar el rol sin validar el token'
-        });
+    if(req.odontologo){
+        const {nombre} = req.odontologo;
+            return res.status(401).json({
+                ok: false,
+                msg: `${nombre} no es administrador - no puede realizar está acción`
+            });
+        
+    }else{
+        if(!req.usuario){
+            return res.status(500).json({
+                ok: false,
+                msg: 'Se quiere validar el rol sin validar el token'
+            });
+            
+        }
     }
-
+    
     const {nombre, rol} = req.usuario;
-
     const userRol = await Rol.findById(rol)
+
 
     if(userRol.nombre !== 'administrador'){
         return res.status(401).json({
             ok: false,
             msg: `${nombre} no es administrador - no puede realizar está acción`
         });
+    }
+
+    next();
+}
+const OndontoRole = async (req, res = response, next) => {
+
+    if(req.usuario){
+        const {nombre} = req.usuario;
+            return res.status(401).json({
+                ok: false,
+                msg: `${nombre} no es odontólogo - no puede realizar esta acción`
+            });
+        
+    }else{
+        if(!req.odontologo){
+            return res.status(500).json({
+                ok: false,
+                msg: 'Se quiere validar el rol sin validar el token'
+            });
+            
+        }
     }
 
     next();
@@ -60,5 +91,6 @@ const AdminOrOdontoRole = async (req, res = response, next) => {
 
 module.exports = {
     AdminRole,
-    AdminOrOdontoRole
+    AdminOrOdontoRole,
+    OndontoRole
 }

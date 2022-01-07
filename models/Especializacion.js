@@ -5,6 +5,11 @@ const EspecializacionSchema = Schema({
         type: String,
         required: true,
         unique: true
+    },
+    idTipoCita: {
+        type: Schema.Types.ObjectId,
+        ref: 'tipoCita',
+        required: true,
     }
 },
 {

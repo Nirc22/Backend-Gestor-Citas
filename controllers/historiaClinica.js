@@ -30,6 +30,15 @@ const getHClinica = async (req, resp = response) => {
 const crearHClinica = async (req, resp = response) => {
 
     try {
+
+        const exis = await HistoriaClinica.findOne({idUsuario: req.body.idUsuario})
+        if(exis){
+            resp.status(500).json({
+                ok: false,
+                msg: 'Este usuario ya tiene una historia clínica',
+            });
+        }
+
         const hClinica = new HistoriaClinica(req.body);
         const hClinicaSave = await hClinica.save();
         resp.status(201).json({
@@ -47,14 +56,15 @@ const crearHClinica = async (req, resp = response) => {
     }
 }
 
+
 /**actualizarHClinica */
 
 const actualizarHClinica = async (req, resp = response) => {
 
     try {
         const {id} = req.params;
-        const {observacion} = req.body;
         const hClinica = await HistoriaClinica.findById(id);
+        console.log(hClinica);
 
         if (!hClinica) {
             resp.status(404).json({
@@ -63,8 +73,6 @@ const actualizarHClinica = async (req, resp = response) => {
             });
         }
 
-        req.body.observacion = {...hClinica.observacion, observacion};
-        console.log(hClinica.observacion, observacion)
         const HclinicaActualizada = await HistoriaClinica.findByIdAndUpdate(id, req.body, { new: true });
 
         resp.status(200).json({

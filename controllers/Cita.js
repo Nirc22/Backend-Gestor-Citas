@@ -9,6 +9,7 @@ const getCita = async (req, resp = response) => {
 
     try {
         const citas = await Cita.find()
+                                    .populate('idHorario','fecha')
                                     .populate('idCupo')
                                     .populate('idSede', 'nombre')
                                     .populate('tipoCita','nombre')
@@ -35,12 +36,12 @@ const crearCita = async (req, resp = response) => {
 
     try {
         const cita = new Cita(req.body);
-        const { idCupo, idOdontologo,idDia } = req.body;
+        const { idHorario, idOdontologo, idCupo } = req.body;
 
-        let citas = await Cita.findOne({idCupo,idOdontologo});
-        console.log(citas);
+        let citas = await Cita.findOne({idHorario,idOdontologo,idCupo});
+        console.log("c " + citas);
 
-       /* if(citas){
+        if(citas){
             return resp.status(400).json({
                 ok: false,
                 msg: 'No hay cupo'
@@ -48,16 +49,19 @@ const crearCita = async (req, resp = response) => {
         }
         const citaSave = await cita.save();
         
-        let cupo = await Cupo.findById( idCupo );
-        cupo.estado = !cupo.estado;
+        let horario = await Horario.findById(idHorario);
 
-        await Cupo.findByIdAndUpdate(idCupo, cupo, {new: true});
+        const {idCupos} = horario;
+        const cupoNuevo = idCupos.filter(e => e.cupo != idCupo);
+        horario.idCupos = cupoNuevo;
+        
+        await Horario.findByIdAndUpdate(idHorario, horario, {new: true});
 
         resp.status(201).json({
             ok: true,
             msg: 'Cita creada de manera exitosa',
             citaSave
-        });*/
+        });
 
     } catch(error) {
         console.log(error);
@@ -67,7 +71,7 @@ const crearCita = async (req, resp = response) => {
         });
     }
 }
-
+/* Actualizar es sinónimo de reasignar XD*/
 const actualizarCita = async (req, resp = response) => { 
 
     try {
@@ -81,7 +85,27 @@ const actualizarCita = async (req, resp = response) => {
             });
         }
 
+        const { idHorario, idOdontologo, idCupo } = req.body;
+        let citas = await Cita.findOne({idHorario,idOdontologo,idCupo});
+
+        if(citas){
+            return resp.status(400).json({
+                ok: false,
+                msg: 'No hay cupo'
+            })
+        }
+
         const citaActualizada = await Cita.findByIdAndUpdate(citaId, req.body, { new: true });
+
+        //Volver a crear horario viejo 
+        
+        let idCupos = [ {"cupo": cita.idCupo}]
+        const id = cita.idHorario;
+
+        console.log(idCupos)
+        
+        const horarioActualizado = await Horario.findByIdAndUpdate(id, idCupos, {new: true});
+        console.log(horarioActualizado)
 
         resp.status(200).json({
             ok: true,
@@ -129,9 +153,36 @@ const eliminarCita = async (req, resp = response) => {
     }
 }
 
+const getCitaByOdonto = async (req, resp = response) => {
+
+    try {
+        const {idOdontologo} = req.params;
+        const citas = await Cita.find({idOdontologo: idOdontologo})
+                                    .populate('idHorario','fecha')
+                                    .populate('idCupo')
+                                    .populate('idSede', 'nombre')
+                                    .populate('tipoCita','nombre')
+                                    .populate('idCliente', ['nombre','apellidos','email','telefono','documento','fechaNacimiento'])
+
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de Citas',
+            citas
+        });
+    }
+    catch(error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al listar citas',
+        });
+    }
+}
+
 module.exports = {
     getCita,
     crearCita,
     actualizarCita,
-    eliminarCita
+    eliminarCita,
+    getCitaByOdonto
 };

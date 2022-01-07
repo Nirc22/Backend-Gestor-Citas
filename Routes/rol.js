@@ -7,13 +7,14 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 //Controllers
 const { getRol, crearRol, actualizarRol } = require('../controllers/rol');
 const { validarCampos } = require('../middlewares/validar-campos');
+const { AdminRole } = require('../middlewares/validar-roles');
 
 //Aplicar validación a todas las rutas
 router.use(validarJWT);
 
 //Rutas
 
-router.get('/', getRol);
+router.get('/', AdminRole, getRol);
 
 router.post(
     '/create', 
@@ -21,6 +22,7 @@ router.post(
         check('nombre','El nombre del rol es obligatorio').not().isEmpty(),
         validarCampos
     ],
+    AdminRole,
     crearRol);
 
 router.put(
@@ -29,6 +31,7 @@ router.put(
         check('nombre','El nombre del rol es obligatorio').not().isEmpty(),
         validarCampos
     ],
+    AdminRole,
     actualizarRol);
 
 

@@ -26,6 +26,7 @@ app.use('/api/especializacion',require('./Routes/especializacion'));
 app.use('/api/horario', require('./Routes/horario'));
 app.use('/api/cupo', require('./Routes/cupo'));
 app.use("/api/password-reset", require('./Routes/password-reset'));
+app.use('/api/filtros', require('./Routes/filtros'));
 
 app.listen(process.env.Port, () =>{
     console.log(`Servidor corriendo en el puerto ${process.env.Port}`);
