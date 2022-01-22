@@ -32,5 +32,8 @@ const CitaSchema = Schema({
         ref: 'tipoCita',
         required: true
     }
+},
+{
+    timestamps: true
 });
 module.exports = model('cita', CitaSchema)

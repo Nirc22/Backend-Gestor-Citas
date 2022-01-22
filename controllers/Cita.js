@@ -1,3 +1,4 @@
+const moment = require('moment');
 const { response } = require('express');
 
 const Cita = require('../models/Cita');
@@ -39,7 +40,6 @@ const crearCita = async (req, resp = response) => {
         const { idHorario, idOdontologo, idCupo } = req.body;
 
         let citas = await Cita.findOne({idHorario,idOdontologo,idCupo});
-        console.log("c " + citas);
 
         if(citas){
             return resp.status(400).json({
@@ -47,21 +47,35 @@ const crearCita = async (req, resp = response) => {
                 msg: 'No hay cupo'
             })
         }
-        const citaSave = await cita.save();
-        
+       
         let horario = await Horario.findById(idHorario);
 
         const {idCupos} = horario;
-        const cupoNuevo = idCupos.filter(e => e.cupo != idCupo);
-        horario.idCupos = cupoNuevo;
-        
-        await Horario.findByIdAndUpdate(idHorario, horario, {new: true});
+        const cupoOld = idCupos.some(cup=>{
+            return cup.cupo == idCupo;
+        })
+ 
+        if(cupoOld){
+            const cupoNuevo = idCupos.filter(e => e.cupo != idCupo);
+            horario.idCupos = cupoNuevo;
 
-        resp.status(201).json({
-            ok: true,
-            msg: 'Cita creada de manera exitosa',
-            citaSave
-        });
+            const citaSave = await cita.save();
+            
+            await Horario.findByIdAndUpdate(idHorario, horario, {new: true});
+
+            resp.status(201).json({
+                ok: true,
+                msg: 'Cita creada de manera exitosa',
+                citaSave
+            });
+
+        }else{
+            resp.status(201).json({
+                ok: true,
+                msg: 'No se pudo crear la cita'
+            });
+        }
+        
 
     } catch(error) {
         console.log(error);
@@ -76,43 +90,87 @@ const actualizarCita = async (req, resp = response) => {
 
     try {
         const citaId = req.params.id;
-        const cita = await Cita.findById(citaId);
+        const cita = await Cita.findById(citaId).populate('idCupo')
+                                                .populate('idHorario');
+
 
         if(!cita) {
-            resp.status(404).json({
+            return resp.status(404).json({
                 ok: false,
                 msg: 'El id de la cita no coincide con ningun elemento en la base de datos',
             });
         }
 
         const { idHorario, idOdontologo, idCupo } = req.body;
-        let citas = await Cita.findOne({idHorario,idOdontologo,idCupo});
+        const citas = await Cita.findOne({idHorario,idOdontologo,idCupo});
+        
+        var now = moment();
 
-        if(citas){
-            return resp.status(400).json({
+        const {fecha} = cita.idHorario
+        const {horaInicio} = cita.idCupo
+
+        const old = moment(`${fecha} ${horaInicio}`,'DD-MM-YYYY HH:mm');
+
+        const resul = old.diff(now, 'hours');
+
+        if(resul>24){
+            
+            if(citas){
+                return resp.status(400).json({
+                    ok: false,
+                    msg: 'No hay cupo'
+                })
+            }
+
+            const h = await Horario.findById(idHorario);
+
+            var {idCupos} = h;
+            const cupoOld = idCupos.some(cup=>{
+                return cup.cupo == idCupo;
+            });
+     
+            if(cupoOld){
+
+                const citaActualizada = await Cita.findByIdAndUpdate(citaId, req.body, { new: true });
+   
+                //Quito el cupo que se actualizó    
+                let horarioUpdate = await Horario.findById(idHorario);
+                let {idCupos} = horarioUpdate;
+                const idCupoR = req.body.idCupo;
+                const cupoNuevo = idCupos.filter(e => e.cupo != idCupoR);
+                horarioUpdate.idCupos = cupoNuevo;
+                await Horario.findByIdAndUpdate(idHorario, horarioUpdate, {new: true});
+        
+                //Volver a crear horario viejo 
+                const {_id} = cita.idHorario;
+                let horario = await Horario.findById(_id);
+    
+                let idCupo = {"cupo": cita.idCupo};
+                horario.idCupos = [...horario.idCupos, idCupo];
+    
+                await Horario.findByIdAndUpdate(_id, horario, {new: true});
+        
+                resp.status(200).json({
+                    ok: true,
+                    msg: 'Cita actualizada de manera exitosa',
+                    cita: citaActualizada
+                });
+            }else{
+                resp.status(200).json({
+                    ok: true,
+                    msg: 'Cita actualizada de manera exitosa',
+                    cita: citaActualizada
+                });
+            }
+           
+    
+        }else{
+            resp.status(200).json({
                 ok: false,
-                msg: 'No hay cupo'
-            })
+                msg: 'No puede actualizar o cancelar la cita agendada antes de 24 horas',
+            });
         }
-
-        const citaActualizada = await Cita.findByIdAndUpdate(citaId, req.body, { new: true });
-
-        //Volver a crear horario viejo 
         
-        let idCupos = [ {"cupo": cita.idCupo}]
-        const id = cita.idHorario;
-
-        console.log(idCupos)
-        
-        const horarioActualizado = await Horario.findByIdAndUpdate(id, idCupos, {new: true});
-        console.log(horarioActualizado)
-
-        resp.status(200).json({
-            ok: true,
-            msg: 'Cita actualizada de manera exitosa',
-            cita: citaActualizada
-        });
-
 
     } catch(error) {
         console.log(error);
@@ -127,7 +185,8 @@ const eliminarCita = async (req, resp = response) => {
 
     try {
         const citaId = req.params.id;
-        const cita = await Cita.findById(citaId);
+        const cita = await Cita.findById(citaId).populate('idCupo')
+                                                .populate('idHorario');
 
         if(!cita) {
             resp.status(404).json({
@@ -135,13 +194,43 @@ const eliminarCita = async (req, resp = response) => {
                 msg: 'El id de la cita no coincide con ningun elemento en la base de datos',
             });
         }
+        
+        var now = moment();
 
-        await Cita.findByIdAndDelete(citaId);
+        const {fecha} = cita.idHorario
+        const {horaInicio} = cita.idCupo
 
-        resp.status(200).json({
-            ok: true,
-            msg: 'Cita eliminada de manera exitosa'
-        });
+        const old = moment(`${fecha} ${horaInicio}`,'DD-MM-YYYY HH:mm');
+
+        const resul = old.diff(now, 'hours');
+
+        if(resul>24){
+            
+            const id = req.params.id;
+            const cita = await Cita.findById(id);
+
+            const {idHorario, idCupo} = cita;
+
+            let horario = await Horario.findById(idHorario);
+
+            let cupo = {"cupo": idCupo};
+            horario.idCupos = [...horario.idCupos, cupo];
+
+            await Horario.findByIdAndUpdate(idHorario, horario, {new: true});
+
+            await Cita.findByIdAndDelete(id);
+            
+            resp.status(200).json({
+                ok: true,
+                msg: 'Cita cancelada de manera exitosa'
+            });
+
+        }else{
+            resp.status(200).json({
+                ok: false,
+                msg: 'No puede cancelar la cita agendada antes de 24 horas',
+            });
+        }
 
 
     } catch(error) {
@@ -158,7 +247,7 @@ const getCitaByOdonto = async (req, resp = response) => {
     try {
         const {idOdontologo} = req.params;
         const citas = await Cita.find({idOdontologo: idOdontologo})
-                                    .populate('idHorario','fecha')
+                                    .populate('idHorario','fechaNow')
                                     .populate('idCupo')
                                     .populate('idSede', 'nombre')
                                     .populate('tipoCita','nombre')

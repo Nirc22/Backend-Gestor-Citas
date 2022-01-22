@@ -35,8 +35,8 @@ router.post('/create',
 // Actualizar Horario
 router.put('/update/:id',
 [
-    check('dia','El dia es obligatorio').not().isEmpty().trim(),
-    check('idCupos','El idCupos es obligatorio').not().isEmpty().trim(),
+    check('fecha','la fecha es obligatorio').not().isEmpty().trim(),
+    check('idCupos','El idCupos es obligatorio').not().isEmpty(),
     check('idOdontologo', 'El idOdontologo es obligatorio').not().isEmpty().trim()
 ],
     validarCampos,

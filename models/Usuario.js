@@ -18,6 +18,10 @@ const UsuarioSchema = Schema({
         type: Number,
         required: true
     },
+    tipoDocumento: {
+        type: String,
+        required: true
+    },
     documento: {
         type: Number,
         required: true,

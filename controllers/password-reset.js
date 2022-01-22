@@ -43,7 +43,7 @@ const enviarLink = async (req, res) => {
         console.log("token "+ token)
 
 
-        const link = `${process.env.BASE_URL}/password-reset/${_id}/${token}`;
+        const link = `http://localhost:3000/api/password-reset/${_id}/${token}`;
 
 
         res.status(200).json({
