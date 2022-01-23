@@ -18,7 +18,7 @@ const getHClinica = async (req, resp = response) => {
     }
     catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'Error al listar historias clinicas',
         });
@@ -33,7 +33,7 @@ const crearHClinica = async (req, resp = response) => {
 
         const exis = await HistoriaClinica.findOne({idUsuario: req.body.idUsuario})
         if(exis){
-            resp.status(500).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'Este usuario ya tiene una historia clínica',
             });
@@ -41,7 +41,7 @@ const crearHClinica = async (req, resp = response) => {
 
         const hClinica = new HistoriaClinica(req.body);
         const hClinicaSave = await hClinica.save();
-        resp.status(201).json({
+        resp.status(200).json({
             ok: true,
             msg: 'Historia clinica creada de manera exitosa',
             hClinicaSave
@@ -49,7 +49,7 @@ const crearHClinica = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'Error al crear la historia clinica',
         });
@@ -67,7 +67,7 @@ const actualizarHClinica = async (req, resp = response) => {
         console.log(hClinica);
 
         if (!hClinica) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id de la historia clinica no coincide con ningun elemento en la base de datos',
             });
@@ -84,7 +84,7 @@ const actualizarHClinica = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al actualizar la historia clinica',
         });

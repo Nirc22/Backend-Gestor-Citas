@@ -17,7 +17,7 @@ const getSede = async (req, resp = response) => {
         
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al obtener las sedes',
         });
@@ -34,13 +34,13 @@ const crearSede = async (req, resp) => {
 
         let sedes = await Sede.findOne({nombre});
         if(sedes){
-            return resp.status(400).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'Ya existe una sede con ese nombre'
             })
         }
         const sedeSave = await sede.save();
-        resp.status(201).json({
+        resp.status(200).json({
             ok: true,
             msg: 'Sede creada de manera exitosa',
             sedeSave
@@ -48,7 +48,7 @@ const crearSede = async (req, resp) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al crear la sede',
         });
@@ -67,7 +67,7 @@ const actualizarSede = async (req, resp = response) => {
         const sede = await Sede.findById(sedeId);
 
         if (!sede) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id de la sede no coincide con ningun elemento en la base de datos',
             });
@@ -75,7 +75,7 @@ const actualizarSede = async (req, resp = response) => {
 
         const sedeActualizada = await Sede.findByIdAndUpdate(sedeId, req.body, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Sede actualizada de manera exitosa',
             sede: sedeActualizada

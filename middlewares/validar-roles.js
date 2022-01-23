@@ -7,14 +7,14 @@ const AdminRole = async (req, res = response, next) => {
 
     if(req.odontologo){
         const {nombre} = req.odontologo;
-            return res.status(401).json({
+            return res.status(201).json({
                 ok: false,
                 msg: `${nombre} no es administrador - no puede realizar está acción`
             });
         
     }else{
         if(!req.usuario){
-            return res.status(500).json({
+            return res.status(400).json({
                 ok: false,
                 msg: 'Se quiere validar el rol sin validar el token'
             });
@@ -27,7 +27,7 @@ const AdminRole = async (req, res = response, next) => {
 
 
     if(userRol.nombre !== 'administrador'){
-        return res.status(401).json({
+        return res.status(201).json({
             ok: false,
             msg: `${nombre} no es administrador - no puede realizar está acción`
         });
@@ -39,14 +39,14 @@ const OndontoRole = async (req, res = response, next) => {
 
     if(req.usuario){
         const {nombre} = req.usuario;
-            return res.status(401).json({
+            return res.status(201).json({
                 ok: false,
                 msg: `${nombre} no es odontólogo - no puede realizar esta acción`
             });
         
     }else{
         if(!req.odontologo){
-            return res.status(500).json({
+            return res.status(400).json({
                 ok: false,
                 msg: 'Se quiere validar el rol sin validar el token'
             });
@@ -60,7 +60,7 @@ const OndontoRole = async (req, res = response, next) => {
 const AdminOrOdontoRole = async (req, res = response, next) => {
 
     if(!req.usuario && !req.odontologo){
-        return res.status(500).json({
+        return res.status(400).json({
             ok: false,
             msg: 'Se quiere validar el rol sin validar el token'
         });
@@ -72,14 +72,14 @@ const AdminOrOdontoRole = async (req, res = response, next) => {
         const userRol = await Rol.findById(rol)
 
         if(userRol.nombre !== 'administrador'){
-            return res.status(401).json({
+            return res.status(201).json({
                 ok: false,
                 msg: `${nombre} no es administrador - no puede realizar está acción`
             });
         }
     }else{
         if(!req.odontologo){
-            return res.status(401).json({
+            return res.status(201).json({
                 ok: false,
                 msg: 'El usuario no es odontologo y no puede realizar está acción'
             });

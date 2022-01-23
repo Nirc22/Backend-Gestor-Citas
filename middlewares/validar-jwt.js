@@ -10,7 +10,7 @@ const validarJWT = async (req = request, res = response, next) => {
     token = req.headers['x-access-token'] || req.headers['authorization'];
 
     if(!token) {
-        return res.status(401).json({
+        return res.status(201).json({
             ok: false,
             msg: 'No hay token en la petición'
         });
@@ -35,14 +35,14 @@ const validarJWT = async (req = request, res = response, next) => {
         }else{
             if(odontologo){
                 if(!odontologo.estado){
-                    res.status(401).json({
+                    res.status(201).json({
                         ok: false,
                         msg: 'Odontólogo inactivo'
                     })
                 }
                 req.odontologo = odontologo;
             }else{
-                res.status(401).json({
+                res.status(201).json({
                     ok: false,
                     msg: 'Token no valido'
                 })

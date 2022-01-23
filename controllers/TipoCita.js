@@ -26,7 +26,7 @@ const crearTipoCita = async (req, resp = response) => {
         let tipo = await TipoCita.findOne(nombre);
 
         if(tipo){
-            return resp.status(400).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'Ya existe un tipo de cita con ese nombre'
             })
@@ -35,7 +35,7 @@ const crearTipoCita = async (req, resp = response) => {
         const tipoCita = new TipoCita(req.body);
         const tipoCitaSave = await tipoCita.save();
 
-        resp.status(201).json({
+        resp.status(200).json({
             ok: true,
             msg: 'Tipo cita creada de manera exitosa',
             tipoCitaSave
@@ -43,7 +43,7 @@ const crearTipoCita = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'Error al crear el tipo de cita',
         });
@@ -57,7 +57,7 @@ const actualizarTipoCita = async (req, resp = response) => {
         const tipoCita = await TipoCita.findById(tipoCitaId);
 
         if(!tipoCita) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id del tipo cita no coincide con ningun elemento en la base de datos',
             });
@@ -74,7 +74,7 @@ const actualizarTipoCita = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'Error al actualizar el tipo cita',
         });
@@ -88,7 +88,7 @@ const eliminarTipoCita = async (req, resp = response) => {
         const tipoCita = await TipoCita.findById(tipoCitaId);
 
         if(!tipoCita) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id del tipo cita no coincide con ningun elemento en la base de datos',
             });
@@ -104,7 +104,7 @@ const eliminarTipoCita = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'Error al eliminar el tipo cita',
         });

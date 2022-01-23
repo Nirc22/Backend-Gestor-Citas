@@ -42,7 +42,7 @@ const crearCita = async (req, resp = response) => {
         let citas = await Cita.findOne({idHorario,idOdontologo,idCupo});
 
         if(citas){
-            return resp.status(400).json({
+            return resp.status(200).json({
                 ok: false,
                 msg: 'No hay cupo'
             })
@@ -95,7 +95,7 @@ const actualizarCita = async (req, resp = response) => {
 
 
         if(!cita) {
-            return resp.status(404).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'El id de la cita no coincide con ningun elemento en la base de datos',
             });
@@ -116,7 +116,7 @@ const actualizarCita = async (req, resp = response) => {
         if(resul>24){
             
             if(citas){
-                return resp.status(400).json({
+                return resp.status(200).json({
                     ok: false,
                     msg: 'No hay cupo'
                 })
@@ -189,7 +189,7 @@ const eliminarCita = async (req, resp = response) => {
                                                 .populate('idHorario');
 
         if(!cita) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id de la cita no coincide con ningun elemento en la base de datos',
             });

@@ -16,7 +16,7 @@ const getOdontologoById = async (req, resp = response) => {
         
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al listar odontologo',
         });
@@ -39,7 +39,7 @@ const getOdontologo = async (req, resp = response) => {
         
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al listar odontologos',
         });
@@ -57,13 +57,13 @@ const crearOdontologo = async (req, resp) => {
         let odonto = await Odontologo.findOne({documento});
         let odonto2 = await Odontologo.findOne({email});
         if (odonto) {
-            return resp.status(400).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'Ya existe un odontologo registrado con ese documento'
             })
         }
         if(odonto2){
-            return resp.status(400).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'Ya existe un odontologo registrado con ese email'
             })
@@ -74,7 +74,7 @@ const crearOdontologo = async (req, resp) => {
 
         const odontologoSave = await odontologo.save();
         
-        resp.status(201).json({
+        resp.status(200).json({
             ok: true,
             msg: 'Odontologo creado exitosamente',
             odontologoSave
@@ -82,7 +82,7 @@ const crearOdontologo = async (req, resp) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al crear odontologo',
         });
@@ -100,7 +100,7 @@ const actualizarOdontologo = async (req, resp = response) => {
         const odontologo = await Odontologo.findById(odontologoId);
 
         if(!odontologo) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id del odontologo no coincide con ningun elemento en la base de datos',
             });
@@ -115,7 +115,7 @@ const actualizarOdontologo = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al actualizar odontologo',
         });
@@ -143,7 +143,7 @@ const actualizarPassword = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al actualizar la contraseña',
         });

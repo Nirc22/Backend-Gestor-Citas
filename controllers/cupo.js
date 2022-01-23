@@ -28,7 +28,7 @@ const obtenerCupoById = async (req, resp = response) => {
         const cupo = await Cupo.findById(cupoId);
 
         if(!cupo){
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id no coincide con ningun elemento en la base de datos'
             });
@@ -76,7 +76,7 @@ const actualizarCupo = async (req, resp = response) => {
         const cupo = await Cupo.findById(cupoId);
 
         if(!cupo){
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id del cupo no coincide con ningun elemento en la base de datos',
             });
@@ -106,7 +106,7 @@ const eliminarCupo = async (req, resp = response) => {
         const cupo = await Cupo.findById(cupoId);
 
         if(!cupo){
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id del cupo no coincide con ningun elemento en la base de datos',
             });

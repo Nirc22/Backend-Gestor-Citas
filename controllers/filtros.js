@@ -11,7 +11,7 @@ const filtroTipoCitaYSede = async (req, resp = response) => {
         const especializacion = await Especializacion.find({idTipoCita: idTipoCita});
 
         if(!especializacion){
-            resp.status(500).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'No hay respuestas'
             });
@@ -28,7 +28,7 @@ const filtroTipoCitaYSede = async (req, resp = response) => {
         }
 
         if(listaOdonto.length === 0){
-            resp.status(500).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'No hay respuestas'
             });
@@ -43,7 +43,7 @@ const filtroTipoCitaYSede = async (req, resp = response) => {
         
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al listar especialización',
         });
@@ -61,14 +61,14 @@ const filtroOndont = async (req, resp = response) => {
 
 
         if(!horario || !odontologo){
-            resp.status(500).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'No hay respuestas'
             });
         }
         else{
             if(horario.length === 0){
-                resp.status(500).json({
+                resp.status(201).json({
                     ok: false,
                     msg: `${odontologo.nombre} no tiene horario disponible`,
                 });
@@ -85,7 +85,7 @@ const filtroOndont = async (req, resp = response) => {
         
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al listar horario',
         });
@@ -102,13 +102,13 @@ const filtroFecha = async (req, resp = response) => {
         const odontologo = await Odontologo.findById(idOdontologo);
 
         if(!horarios || !odontologo){
-            resp.status(500).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'No hay respuestas'
             });
         }else{
             if(horario.length === 0){
-                resp.status(500).json({
+                resp.status(201).json({
                     ok: false,
                     msg: 'No hay cupos disponible',
                 });
@@ -126,7 +126,7 @@ const filtroFecha = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al listar horarios',
         });

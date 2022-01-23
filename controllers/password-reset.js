@@ -31,7 +31,7 @@ const enviarLink = async (req, res) => {
                 email = odontologo.email;
             }else
             {
-                res.status(400).json({
+                res.status(201).json({
                     ok: false,
                     msj: "El correo no existe"
                 });

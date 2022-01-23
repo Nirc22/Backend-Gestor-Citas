@@ -16,7 +16,7 @@ const getRol = async (req, resp = response) => {
         
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al listar roles',
         });
@@ -39,7 +39,7 @@ const crearRol = async (req, resp) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al crear rol',
         });
@@ -57,7 +57,7 @@ const actualizarRol = async (req, resp = response) => {
         const rol = await Rol.findById(rolId);
 
         if(!rol) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id del rol no coincide con ningun elemento en la base de datos',
             });
@@ -74,7 +74,7 @@ const actualizarRol = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'error al actualizar el rol',
         });
