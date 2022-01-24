@@ -47,4 +47,9 @@ const OdontologoSchema = Schema({
     }
 });
 
+OdontologoSchema.methods.toJSON = function() {
+    const { __v, password, ...odontologo  } = this.toObject();
+    return odontologo;
+}
+
 module.exports = model('odontologo', OdontologoSchema)

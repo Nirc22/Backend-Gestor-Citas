@@ -31,7 +31,10 @@ const enviarLink = async (req, res) => {
                 email = odontologo.email;
             }else
             {
-                return res.status(400).send("El correo no existe");
+                res.status(201).json({
+                    ok: false,
+                    msj: "El correo no existe"
+                });
             }
         }
 
@@ -40,13 +43,15 @@ const enviarLink = async (req, res) => {
         console.log("token "+ token)
 
 
-        const link = `${process.env.BASE_URL}/password-reset/${_id}/${token}`;
+        const link = `http://localhost:3000/api/password-reset/${_id}/${token}`;
 
 
-        res.status(200).json("El link para restaurar la constraseña fue enviado a su correo");
+        res.status(200).json({
+            ok: true,
+            msj: "El link para restaurar la constraseña fue enviado a su correo"
+        });
 
         try {
-      
             const transporter = nodemailer.createTransport({
                 host: "smtp.gmail.com",
                 port: 465,
@@ -67,12 +72,18 @@ const enviarLink = async (req, res) => {
             console.log("enviado")
 
         } catch (error) {
-            res.status(500).json("Correo no enviado");
+            res.status(400).json({
+                ok: false,
+                msj: "Correo no enviado"
+            });
         }
        
         
     } catch (error) {
-        res.status(500).json("Ocurrió un error");
+        res.status(400).json({
+            ok: false,
+            msj: "Ocurrió un error"
+        });
         console.log(error);
     }
 }
@@ -83,8 +94,10 @@ const restablecer = async (req, res) => {
         const {uid} = jwt.verify(token, process.env.SECRET_KEY);
 
         const user = await Usuario.findById(uid);
+        console.log("user " + user)
+     
         const odontologo = await Odontologo.findById(uid);
-
+        console.log("odontologo " + odontologo)
         password = req.body.password;
 
         const salt = bcrypt.genSaltSync();
@@ -93,10 +106,13 @@ const restablecer = async (req, res) => {
         if(user){
             user.password = bcrypt.hashSync(password, salt);
             await user.save();
+            res.status(200).json("Contraseña restablecida exitosamente");
+            
         }else{
             if(odontologo){
                 odontologo.password = bcrypt.hashSync(password, salt);
                 await odontologo.save();
+                res.status(200).json("Contraseña restablecida exitosamente");
             }
         }
         
@@ -109,8 +125,11 @@ const restablecer = async (req, res) => {
         } */
             
         
-    } catch (error) {
-        res.status(500).json("Token expirado o inválido");
+    } catch(error) {
+        res.status(400).json({
+            ok: false,
+            msj: "Token expirado o inválido"
+        });
         console.log(error);
     }
 }

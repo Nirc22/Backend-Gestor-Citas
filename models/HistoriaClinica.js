@@ -3,21 +3,24 @@ const { Schema, model } = require('mongoose');
 const H_ClinicaSchema = Schema({
     idUsuario:{
         type: Schema.Types.ObjectId,
-        ref: 'Usuario',
-        required: true 
+        ref: 'usuario',
+        required: [true, 'El usuario es obligatorio'] 
     },
     idCita:{
         type: Schema.Types.ObjectId,
-        ref: 'Cita',
-        required: true 
+        ref: 'cita',
+        required: [true, 'la cita es obligatoria'] 
     },
-    observacion: {
+    observacion: [{
+        obs: {
+            type: String
+        }
+    }],
+    fecha: {
         type: String,
-        required: true
-    },
-},
-{
-    collection: 'historiasClinicas'
+        default: Date.now()
+    }
+
 });
 
 module.exports = model('h_clinica', H_ClinicaSchema)

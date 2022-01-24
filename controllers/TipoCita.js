@@ -2,8 +2,9 @@ const { response } = require('express');
 const TipoCita = require('../models/TipoCita');
 
 const getTipoCita = async (req, resp = response) => {
-    const tipoCitas = await TipoCita.find();
+   
     try{
+        const tipoCitas = await TipoCita.find().populate('nombre');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de tipo de citas',
@@ -19,12 +20,22 @@ const getTipoCita = async (req, resp = response) => {
 }
 
 const crearTipoCita = async (req, resp = response) => { 
-    
-    const tipoCita = new TipoCita(req.body);
 
     try {
+        const nombre = req.body.nombre;
+        let tipo = await TipoCita.findOne(nombre);
+
+        if(tipo){
+            return resp.status(201).json({
+                ok: false,
+                msg: 'Ya existe un tipo de cita con ese nombre'
+            })
+        }
+
+        const tipoCita = new TipoCita(req.body);
         const tipoCitaSave = await tipoCita.save();
-        resp.status(201).json({
+
+        resp.status(200).json({
             ok: true,
             msg: 'Tipo cita creada de manera exitosa',
             tipoCitaSave
@@ -32,7 +43,7 @@ const crearTipoCita = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'Error al crear el tipo de cita',
         });
@@ -40,15 +51,13 @@ const crearTipoCita = async (req, resp = response) => {
 }
 
 const actualizarTipoCita = async (req, resp = response) => { 
-    
-    const tipoCitaId = req.params.id;
 
     try {
-        
+        const tipoCitaId = req.params.id;
         const tipoCita = await TipoCita.findById(tipoCitaId);
 
         if(!tipoCita) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id del tipo cita no coincide con ningun elemento en la base de datos',
             });
@@ -56,7 +65,7 @@ const actualizarTipoCita = async (req, resp = response) => {
 
         const tipoCitaActualizada = await TipoCita.findByIdAndUpdate(tipoCitaId, req.body, { new: true });
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Tipo cita actualizada de manera exitosa',
             tipoCita: tipoCitaActualizada
@@ -65,7 +74,7 @@ const actualizarTipoCita = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'Error al actualizar el tipo cita',
         });
@@ -73,15 +82,13 @@ const actualizarTipoCita = async (req, resp = response) => {
 }
 
 const eliminarTipoCita = async (req, resp = response) => { 
-    
-    const tipoCitaId = req.params.id;
 
     try {
-        
+        const tipoCitaId = req.params.id;
         const tipoCita = await TipoCita.findById(tipoCitaId);
 
         if(!tipoCita) {
-            resp.status(404).json({
+            resp.status(201).json({
                 ok: false,
                 msg: 'El id del tipo cita no coincide con ningun elemento en la base de datos',
             });
@@ -89,7 +96,7 @@ const eliminarTipoCita = async (req, resp = response) => {
 
         await TipoCita.findByIdAndDelete(tipoCita);
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'El tipo cita eliminada de manera exitosa'
         });
@@ -97,7 +104,7 @@ const eliminarTipoCita = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        resp.status(400).json({
             ok: false,
             msg: 'Error al eliminar el tipo cita',
         });

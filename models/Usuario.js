@@ -18,6 +18,10 @@ const UsuarioSchema = Schema({
         type: Number,
         required: true
     },
+    tipoDocumento: {
+        type: String,
+        required: true
+    },
     documento: {
         type: Number,
         required: true,
@@ -45,5 +49,10 @@ const UsuarioSchema = Schema({
         type: String
     }
 });
+UsuarioSchema.methods.toJSON = function() {
+    const { __v, password, ...usuario  } = this.toObject();
+    return usuario;
+}
+
 
 module.exports = model('usuario', UsuarioSchema)

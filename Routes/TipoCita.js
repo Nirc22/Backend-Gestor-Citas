@@ -6,28 +6,31 @@ const {getTipoCita, crearTipoCita, actualizarTipoCita, eliminarTipoCita} = requi
 
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
+const { AdminRole } = require('../middlewares/validar-roles');
 
 //Aplicar validación a todas las rutas
 router.use(validarJWT);
 
-router.get('/listar', getTipoCita);
+router.get('/', getTipoCita);
 
 router.post(
-    '/crear', 
+    '/create', 
     [
         check('nombre','El nombre del tipo de cita es obligatorio').not().isEmpty(),
         validarCampos
     ],
+    AdminRole,
     crearTipoCita);
 
 router.put(
-    '/actualizar/:id', 
+    '/update/:id', 
     [
         check('nombre','El nombre del tipo de cita es obligatorio').not().isEmpty(),
         validarCampos
     ],
+    AdminRole,
     actualizarTipoCita);
 
-router.delete('/eliminar/:id', eliminarTipoCita);
+router.delete('/delete/:id', AdminRole,eliminarTipoCita);
 
 module.exports = router;

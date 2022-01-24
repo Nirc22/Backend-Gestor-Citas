@@ -1,10 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const HorarioSchema = Schema({
-    dia: {
-        type: Schema.Types.ObjectId,
-        ref: 'dia',
-        required: true
+    fecha: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true
     },
     idCupos:[{
         cupo: {

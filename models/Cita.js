@@ -7,14 +7,19 @@ const CitaSchema = Schema({
         ref: 'usuario',
         required: true    
     },
-    idCupo:{
+    idHorario:{
         type: Schema.Types.ObjectId,
-        ref: 'cupo',
+        ref: 'horario',
         required: true
-    },
+    },   
     idSede:{
         type: Schema.Types.ObjectId,
         ref: 'sede',
+        required: true
+    },
+    idCupo: {
+        type: Schema.Types.ObjectId,
+        ref: 'cupo',
         required: true
     },
     idOdontologo:{
@@ -27,5 +32,8 @@ const CitaSchema = Schema({
         ref: 'tipoCita',
         required: true
     }
+},
+{
+    timestamps: true
 });
 module.exports = model('cita', CitaSchema)
