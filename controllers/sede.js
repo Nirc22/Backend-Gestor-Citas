@@ -59,8 +59,6 @@ const crearSede = async (req, resp) => {
 
 const actualizarSede = async (req, resp = response) => {
 
- 
-
     try {
         const sedeId = req.params.id;
 

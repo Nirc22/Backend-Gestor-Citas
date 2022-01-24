@@ -21,7 +21,8 @@ router.post(
         check('nombre','El nombre de la sede es obligatorio').not().isEmpty(),
         check('direccion','La direccion es obligatoria').not().isEmpty(),
         check('telefono','El telefono debe ser de 10 caracteres').isLength({min:10}),
-        check('horario','El horario es obligatorio').not().isEmpty(),
+        check('horaInicioSede','La hora de inicio es obligatoria').not().isEmpty(),
+        check('horaFinSede','La hora de fin es obligatoria').not().isEmpty(),
         validarCampos
     ],
     AdminRole,
@@ -33,7 +34,8 @@ router.put(
         check('nombre','El nombre de la sede es obligatorio').not().isEmpty(),
         check('direccion','La direccion es obligatoria').not().isEmpty(),
         check('telefono','El telefono debe ser de 10 caracteres').isLength({min:10}),
-        check('horario','El horario es obligatorio').not().isEmpty(),
+        check('horaInicioSede','La hora de inicio es obligatoria').not().isEmpty(),
+        check('horaFinSede','La hora de fin es obligatoria').not().isEmpty(),
         validarCampos
     ],
     AdminRole,
