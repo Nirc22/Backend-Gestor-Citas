@@ -14,7 +14,11 @@ const SedeSchema = Schema({
         type: Number,
         required: true,
     },
-    horario: {
+    horaInicioSede: {
+        type: String,
+        required: true,
+    },
+    horaFinSede: {
         type: String,
         required: true,
     },
