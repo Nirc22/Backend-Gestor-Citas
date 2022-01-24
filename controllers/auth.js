@@ -5,10 +5,8 @@ const Usuario = require('../models/Usuario');
 const Odontologo = require('../models/Odontologo');
 const { generarJWT } = require('../helpers/generar-jwt');
 
-
 /* Crear Usuario*/
 const crearUsuario = async (req, resp = response) => {
-    
     try {
         const { email, password, documento } = req.body;
 

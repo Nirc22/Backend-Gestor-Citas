@@ -12,7 +12,6 @@ const { validarCampos } = require('../middlewares/validar-campos');
 router.use(validarJWT);
 
 //Rutas
-
 router.get('/', getRol);
 
 router.post(
@@ -30,7 +29,5 @@ router.put(
         validarCampos
     ],
     actualizarRol);
-
-
 
 module.exports = router;
