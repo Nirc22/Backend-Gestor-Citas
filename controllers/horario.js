@@ -70,13 +70,25 @@ const obtenerHorario = async (req, resp = response) => {
 const crearHorario = async (req, resp = response) => {
     try {
         const horario = new Horario(req.body);
-        const horarioSave = await horario.save();
+        const {idOdontologo} = req.body;
+        const odontologo = await Odontologo.findById(idOdontologo);
+        const {estado} = odontologo;
+        console.log(estado);
+        if(estado){
+            const horarioSave = await horario.save();
+            resp.status(200).json({
+                ok: true,
+                msg: 'Horario creado de manera exitosa',
+                horarioSave
+            });
 
-        resp.status(200).json({
-            ok: true,
-            msg: 'Horario creado de manera exitosa',
-            horarioSave
-        });
+        }else{
+            resp.status(201).json({
+                ok: false,
+                msg: 'No puede crear un horario con odontólogo inactivo',
+            });
+        }
+
     } catch (error) {
         console.log(error);
         resp.status(400).json({
