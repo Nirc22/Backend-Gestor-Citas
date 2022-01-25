@@ -34,6 +34,4 @@ router.put(
     AdminRole,
     actualizarRol);
 
-
-
 module.exports = router;

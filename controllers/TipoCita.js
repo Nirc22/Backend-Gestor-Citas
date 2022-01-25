@@ -2,7 +2,6 @@ const { response } = require('express');
 const TipoCita = require('../models/TipoCita');
 
 const getTipoCita = async (req, resp = response) => {
-   
     try{
         const tipoCitas = await TipoCita.find().populate('nombre');
         resp.status(200).json({
@@ -16,7 +15,6 @@ const getTipoCita = async (req, resp = response) => {
             msg: 'Error al listar el tipo de cita',
         });
     }
-    
 }
 
 const crearTipoCita = async (req, resp = response) => { 
