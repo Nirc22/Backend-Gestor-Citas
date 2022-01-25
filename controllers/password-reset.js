@@ -31,7 +31,7 @@ const enviarLink = async (req, res) => {
                 email = odontologo.email;
             }else
             {
-                res.status(201).json({
+                return res.status(201).json({
                     ok: false,
                     msj: "El correo no existe"
                 });
@@ -72,7 +72,7 @@ const enviarLink = async (req, res) => {
             console.log("enviado")
 
         } catch (error) {
-            res.status(400).json({
+            res.status(201).json({
                 ok: false,
                 msj: "Correo no enviado"
             });
@@ -80,7 +80,7 @@ const enviarLink = async (req, res) => {
        
         
     } catch (error) {
-        res.status(400).json({
+        res.status(201).json({
             ok: false,
             msj: "Ocurrió un error"
         });
@@ -126,7 +126,7 @@ const restablecer = async (req, res) => {
             
         
     } catch(error) {
-        res.status(400).json({
+        res.status(201).json({
             ok: false,
             msj: "Token expirado o inválido"
         });
