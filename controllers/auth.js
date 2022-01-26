@@ -32,7 +32,7 @@ const crearUsuario = async (req, resp = response) => {
 
         await usuario.save();
 
-        resp.status(201).json({
+        return resp.status(201).json({
             ok: true,
             msg: 'Registro de usuario exitoso',
             uid: usuario.id,
@@ -40,7 +40,7 @@ const crearUsuario = async (req, resp = response) => {
         });
     } catch (error) {
         console.log(error);
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al crear el usuario'
         })
@@ -58,7 +58,7 @@ const loginUsuario = async (req, resp = response) => {
         let odontologo = await Odontologo.findOne({ email });
 
         if (!usuario && !odontologo){
-            resp.status(201).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'Usuario o contraseña erradas'
             });
@@ -69,7 +69,7 @@ const loginUsuario = async (req, resp = response) => {
             const validPassword = bcrypt.compareSync(password, usuario.password);
             
             if (!validPassword) {
-                resp.status(201).json({
+                return resp.status(201).json({
                     ok: false,
                     msg: 'Usuario o contraseña erradas'
                 });
@@ -77,7 +77,7 @@ const loginUsuario = async (req, resp = response) => {
 
             const token = await generarJWT(usuario.id);
 
-            resp.json({
+            return resp.json({
                 ok: true,
                 msg: 'Sesión Iniciada',
                 uid: usuario.id,
@@ -90,7 +90,7 @@ const loginUsuario = async (req, resp = response) => {
                 const validPassword = bcrypt.compareSync(password, odontologo.password);
                 
                 if (!validPassword) {
-                    resp.status(201).json({
+                    return resp.status(201).json({
                         ok: false,
                         msg: 'Usuario o contraseña erradas'
                     });
@@ -98,7 +98,7 @@ const loginUsuario = async (req, resp = response) => {
 
                 const token = await generarJWT(odontologo.id);
 
-                resp.status(200).json({
+                return resp.status(200).json({
                     ok: true,
                     msg: 'Sesión Iniciada',
                     uid: odontologo.id,
@@ -110,7 +110,7 @@ const loginUsuario = async (req, resp = response) => {
         }
 
     } catch (error) {
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al autenticar'
         });
@@ -137,7 +137,7 @@ const logoutUsuario = async (req, resp = response) => {
     token = req.headers['x-access-token'] || req.headers['authorization'];
 
     if(!token) {
-        resp.status(201).json({
+        return resp.status(201).json({
             ok: false,
             msg: 'No hay token en la petición'
         });
@@ -146,13 +146,13 @@ const logoutUsuario = async (req, resp = response) => {
     try {
         jwt.sign(token, "", { expiresIn: 1 } , (logout, err) => {
             if (logout) {
-                resp.status(200).json({
+                return resp.status(200).json({
                     ok: true,
                     msg: 'Sesión cerrada con exito'
                 });
             } else {
                 console.log(err);
-                resp.status(201).json({
+                return resp.status(201).json({
                     ok: false,
                     msg: 'Error al cerrar sesión'
                 });
@@ -160,7 +160,7 @@ const logoutUsuario = async (req, resp = response) => {
         });
     } catch (error) {
         console.log(error);
-        resp.status(401).json({
+        return resp.status(401).json({
             ok: false,
             msg: 'Error al cerrar sesión'
         });
@@ -174,22 +174,20 @@ const actualizarPassword = async (req, resp = response) => {
     const usuarioAutenticado = req.usuario;
 
     try {
-
         //Encriptar contraseña
         const salt = bcrypt.genSaltSync();
         usuarioAutenticado.password = bcrypt.hashSync(password, salt);
 
-        const passwordUpdate = await Usuario.findByIdAndUpdate(usuarioAutenticado.id, usuarioAutenticado, { new: true });
+        await Usuario.findByIdAndUpdate(usuarioAutenticado.id, usuarioAutenticado, { new: true });
 
-        resp.status(200).json({
+        return resp.status(200).json({
             ok: true,
             msg: 'Contraseña actualizada de manera exitosa',
-            //usuario: passwordUpdate
         });
 
     } catch (error) {
         console.log(error);
-        resp.status(400).json({
+        return resp.status(400).json({
             ok: false,
             msg: 'error al actualizar la contraseña',
         });
@@ -206,14 +204,14 @@ const actualizarUsuario = async (req, resp = response) => {
         const usuario = await Odontologo.findById(usuarioId);
 
         if(!usuario) {
-            resp.status(201).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'El id no coincide con ningun registro en la base de datos',
             });
         }
         const usuarioActualizado = await Odontologo.findByIdAndUpdate(usuarioId, req.body, {new: true});
 
-        resp.status(200).json({
+        return resp.status(200).json({
             ok: true,
             msg: 'Usuario actualizado exitosamente',
             usuario: usuarioActualizado
@@ -222,7 +220,7 @@ const actualizarUsuario = async (req, resp = response) => {
 
     } catch (error) {
         console.log(error);
-        resp.status(400).json({
+        return resp.status(400).json({
             ok: false,
             msg: 'error al actualizar usuario',
         });
@@ -236,7 +234,7 @@ const revalidarToken = async (req, resp = response) => {
     //generar nuevo token
     const token = await generarJWT(uid, name);
 
-    resp.status(200).json({
+    return resp.status(200).json({
         ok: true,
         token: token
     });
