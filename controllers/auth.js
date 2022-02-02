@@ -5,7 +5,7 @@ const Usuario = require('../models/Usuario');
 const Odontologo = require('../models/Odontologo');
 const { generarJWT } = require('../helpers/generar-jwt');
 
-/* Crear Usuario*/
+/* Crear Usuario */
 const crearUsuario = async (req, resp = response) => {
     try {
         const { email, password, documento } = req.body;
@@ -54,8 +54,8 @@ const loginUsuario = async (req, resp = response) => {
         const { email, password } = req.body;
 
         //confirmar email
-        let usuario = await Usuario.findOne({ email });
-        let odontologo = await Odontologo.findOne({ email });
+        let usuario = await Usuario.findOne({ email }).populate('rol');
+        let odontologo = await Odontologo.findOne({ email }).populate('idEspecializacion');
 
         if (!usuario && !odontologo){
             return resp.status(201).json({
@@ -82,6 +82,7 @@ const loginUsuario = async (req, resp = response) => {
                 msg: 'Sesión Iniciada',
                 uid: usuario.id,
                 name: usuario.nombre,
+                rol: usuario.rol.nombre,
                 token
             });
         }else{
@@ -103,13 +104,12 @@ const loginUsuario = async (req, resp = response) => {
                     msg: 'Sesión Iniciada',
                     uid: odontologo.id,
                     name: odontologo.nombre,
-                    especializacion: odontologo.idEspecializacion,
+                    especializacion: odontologo.idEspecializacion.nombre,
                     token
                 });
             }
         }
-
-    } catch (error) {
+    } catch(error) {
         return resp.status(500).json({
             ok: false,
             msg: 'Error al autenticar'
