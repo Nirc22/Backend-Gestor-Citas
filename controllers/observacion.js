@@ -23,8 +23,8 @@ const getObservacion = async (req, resp = response) => {
 /**getEspecializacion */
 const getObservacionByID = async (req, resp = response) => {
     try {
-        const idHistoriaClinica = req.params.id;
-        const observacion = await Observacion.find({idHistoriaClinica});
+        const idCita = req.params.id;
+        const observacion = await Observacion.find({idCita});
         resp.status(200).json({
             ok: true,
             msg: 'Lista de observaciones',

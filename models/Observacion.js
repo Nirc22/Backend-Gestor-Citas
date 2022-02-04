@@ -1,10 +1,10 @@
 const { Schema, model } = require('mongoose');
 
 const ObservacionesSchema = Schema({
-    idHistoriaClinica:{
+    idCita:{
         type: Schema.Types.ObjectId,
-        ref: 'h_clinica',
-        required: [true, 'La historia clinica es obligatoria'] 
+        ref: 'cita',
+        required: [true, 'la cita es obligatoria'] 
     },
     observacion: {
         type: String,
