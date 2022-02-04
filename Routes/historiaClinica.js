@@ -13,7 +13,6 @@ const { OndontoRole } = require('../middlewares/validar-roles');
 router.use(validarJWT);
 
 //Rutas
-
 router.get('/', OndontoRole, getHClinica);
 
 router.post(
@@ -21,7 +20,6 @@ router.post(
     [
         check('idUsuario','El id del usuario es obligatorio').not().isEmpty(),
         check('idCita','El id de la cita es obligatoria').not().isEmpty(),
-        check('observacion','Se debe ingresar una observacion del tratamiento realizado').not().isEmpty(),
         validarCampos
     ],
     OndontoRole,
@@ -32,12 +30,10 @@ router.put(
     [
         check('idUsuario','El id del usuario es obligatorio').not().isEmpty(),
         check('idCita','El id de la cita es obligatoria').not().isEmpty(),
-        check('observacion','Se debe ingresar una observacion del tratamiento realizado').not().isEmpty(),
         validarCampos
     ],
     OndontoRole,
     actualizarHClinica);
-
 
 
 module.exports = router;

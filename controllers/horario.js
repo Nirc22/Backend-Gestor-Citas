@@ -73,7 +73,6 @@ const crearHorario = async (req, resp = response) => {
         const {idOdontologo} = req.body;
         const odontologo = await Odontologo.findById(idOdontologo);
         const {estado} = odontologo;
-        console.log(estado);
         if(estado){
             const horarioSave = await horario.save();
             resp.status(200).json({

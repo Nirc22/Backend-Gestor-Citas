@@ -23,6 +23,7 @@ app.use('/api/cita', require('./Routes/Cita'));
 app.use('/api/tipoCita', require('./Routes/TipoCita'));
 app.use('/api/odontologo',require('./Routes/odontologo'));
 app.use('/api/especializacion',require('./Routes/especializacion'));
+app.use('/api/observacion',require('./Routes/observacion'));
 app.use('/api/horario', require('./Routes/horario'));
 app.use('/api/cupo', require('./Routes/cupo'));
 app.use("/api/password-reset", require('./Routes/password-reset'));

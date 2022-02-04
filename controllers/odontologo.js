@@ -3,7 +3,6 @@ const Odontologo = require('../models/Odontologo');
 const bcrypt = require('bcryptjs');
 
 /**getOdontologoById */
-
 const getOdontologoById = async (req, resp = response) => {
     try {
         const {id} = req.params;
@@ -24,10 +23,8 @@ const getOdontologoById = async (req, resp = response) => {
 }
 
 /**getOdontologo */
-
 const getOdontologo = async (req, resp = response) => {
     try {
-
         const odontologos = await Odontologo.find()
                                             .populate('idEspecializacion')
                                             .populate('idSede', 'nombre');

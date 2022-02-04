@@ -117,62 +117,9 @@ const loginUsuario = async (req, resp = response) => {
     }
 }
 
-/* Falta hacer Logout */
-const logoutUsuario = async (req, resp = response) => {
-
-    /*
-    const options = {
-        expires: new Date(Date.now() + 5000),
-    }
-
-    
-    resp.cookie('jwt', 'expiredtoken', options);
-    resp.status(200).json({
-        ok: true,
-        msg: 'Sesión cerrada con exito'
-    });*/
-
-    //
-    let token = '';
-    token = req.headers['x-access-token'] || req.headers['authorization'];
-
-    if(!token) {
-        return resp.status(201).json({
-            ok: false,
-            msg: 'No hay token en la petición'
-        });
-    }
-
-    try {
-        jwt.sign(token, "", { expiresIn: 1 } , (logout, err) => {
-            if (logout) {
-                return resp.status(200).json({
-                    ok: true,
-                    msg: 'Sesión cerrada con exito'
-                });
-            } else {
-                console.log(err);
-                return resp.status(201).json({
-                    ok: false,
-                    msg: 'Error al cerrar sesión'
-                });
-            }
-        });
-    } catch (error) {
-        console.log(error);
-        return resp.status(401).json({
-            ok: false,
-            msg: 'Error al cerrar sesión'
-        });
-    }    
-
-}
-
 const actualizarPassword = async (req, resp = response) => {
-
     const {password} = req.body;
     const usuarioAutenticado = req.usuario;
-
     try {
         //Encriptar contraseña
         const salt = bcrypt.genSaltSync();
@@ -192,7 +139,6 @@ const actualizarPassword = async (req, resp = response) => {
             msg: 'error al actualizar la contraseña',
         });
     }
-
 }
 
 const actualizarUsuario = async (req, resp = response) => {
@@ -201,7 +147,7 @@ const actualizarUsuario = async (req, resp = response) => {
 
     try {
         
-        const usuario = await Odontologo.findById(usuarioId);
+        const usuario = await Usuario.findById(usuarioId);
 
         if(!usuario) {
             return resp.status(201).json({
@@ -209,15 +155,14 @@ const actualizarUsuario = async (req, resp = response) => {
                 msg: 'El id no coincide con ningun registro en la base de datos',
             });
         }
-        const usuarioActualizado = await Odontologo.findByIdAndUpdate(usuarioId, req.body, {new: true});
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(usuarioId, req.body, {new: true});
 
         return resp.status(200).json({
             ok: true,
             msg: 'Usuario actualizado exitosamente',
             usuario: usuarioActualizado
         });
-
-
+        
     } catch (error) {
         console.log(error);
         return resp.status(400).json({
@@ -230,9 +175,9 @@ const actualizarUsuario = async (req, resp = response) => {
 
 const revalidarToken = async (req, resp = response) => {
 
-    const { uid, name } = req;
+    const { uid } = req;
     //generar nuevo token
-    const token = await generarJWT(uid, name);
+    const token = await generarJWT(uid);
 
     return resp.status(200).json({
         ok: true,
@@ -243,7 +188,6 @@ const revalidarToken = async (req, resp = response) => {
 module.exports = {
     crearUsuario,
     loginUsuario,
-    logoutUsuario,
     revalidarToken,
     actualizarUsuario,
     actualizarPassword

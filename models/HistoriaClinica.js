@@ -11,16 +11,10 @@ const H_ClinicaSchema = Schema({
         ref: 'cita',
         required: [true, 'la cita es obligatoria'] 
     },
-    observacion: [{
-        obs: {
-            type: String
-        }
-    }],
     fecha: {
         type: String,
         default: Date.now()
     }
-
 });
 
 module.exports = model('h_clinica', H_ClinicaSchema)

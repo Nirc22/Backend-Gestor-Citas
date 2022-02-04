@@ -3,13 +3,12 @@ const HistoriaClinica = require('../models/HistoriaClinica');
 
 
 /**getHClinica */
-
 const getHClinica = async (req, resp = response) => {
    
     try {
         const hClinica = await HistoriaClinica.find()
                                                 .populate('idUsuario')
-                                                .populate( 'idCita');
+                                                .populate('idCita');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de historias clinicas',
