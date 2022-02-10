@@ -145,7 +145,6 @@ const actualizarPassword = async (req, resp = response) => {
             msg: 'error al actualizar la contraseña',
         });
     }
-
 }
 
 module.exports = {

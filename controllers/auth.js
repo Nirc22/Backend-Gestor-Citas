@@ -141,6 +141,26 @@ const actualizarPassword = async (req, resp = response) => {
     }
 }
 
+/**get Usuario By ID */
+const getUsuarioById = async (req, resp = response) => {
+    try {
+        const {id} = req.params;
+        const usuario = await Usuario.findById(id);
+        resp.status(200).json({
+            ok: true,
+            msg: 'Usuario',
+            usuario
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(400).json({
+            ok: false,
+            msg: 'error al listar Usuario',
+        });
+    }
+}
+
+
 const actualizarUsuario = async (req, resp = response) => {
 
     const usuarioId = req.params.id;
@@ -190,5 +210,6 @@ module.exports = {
     loginUsuario,
     revalidarToken,
     actualizarUsuario,
-    actualizarPassword
+    actualizarPassword,
+    getUsuarioById
 }
