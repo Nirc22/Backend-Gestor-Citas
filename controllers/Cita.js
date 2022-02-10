@@ -87,7 +87,6 @@ const crearCita = async (req, resp = response) => {
 }
 /* Actualizar es sinónimo de reasignar XD*/
 const actualizarCita = async (req, resp = response) => { 
-
     try {
         const citaId = req.params.id;
         const cita = await Cita.findById(citaId).populate('idCupo')
@@ -111,7 +110,7 @@ const actualizarCita = async (req, resp = response) => {
 
         const old = moment(`${fecha} ${horaInicio}`,'DD-MM-YYYY HH:mm');
 
-        const resul = old.diff(now, 'hours');
+        const resul = now.diff(old, 'hours');
 
         if(resul>24){
             
@@ -128,11 +127,11 @@ const actualizarCita = async (req, resp = response) => {
             const cupoOld = idCupos.some(cup=>{
                 return cup.cupo == idCupo;
             });
-     
+
             if(cupoOld){
 
                 const citaActualizada = await Cita.findByIdAndUpdate(citaId, req.body, { new: true });
-   
+
                 //Quito el cupo que se actualizó    
                 let horarioUpdate = await Horario.findById(idHorario);
                 let {idCupos} = horarioUpdate;
@@ -157,21 +156,16 @@ const actualizarCita = async (req, resp = response) => {
                 });
             }else{
                 resp.status(200).json({
-                    ok: true,
-                    msg: 'Cita actualizada de manera exitosa',
-                    cita: citaActualizada
+                    ok: false,
+                    msg: 'No se pudo actualizar el cupo anterior',
                 });
             }
-           
-    
         }else{
             resp.status(200).json({
                 ok: false,
                 msg: 'No puede actualizar o cancelar la cita agendada antes de 24 horas',
             });
         }
-        
-
     } catch(error) {
         console.log(error);
         resp.status(500).json({
@@ -182,7 +176,6 @@ const actualizarCita = async (req, resp = response) => {
 }
 
 const eliminarCita = async (req, resp = response) => { 
-
     try {
         const citaId = req.params.id;
         const cita = await Cita.findById(citaId).populate('idCupo')
@@ -202,10 +195,9 @@ const eliminarCita = async (req, resp = response) => {
 
         const old = moment(`${fecha} ${horaInicio}`,'DD-MM-YYYY HH:mm');
 
-        const resul = old.diff(now, 'hours');
-
+        const resul = now.diff(old, 'hours');
+        console.log(resul);
         if(resul>24){
-            
             const id = req.params.id;
             const cita = await Cita.findById(id);
 
@@ -232,7 +224,6 @@ const eliminarCita = async (req, resp = response) => {
             });
         }
 
-
     } catch(error) {
         console.log(error);
         resp.status(500).json({
@@ -243,7 +234,6 @@ const eliminarCita = async (req, resp = response) => {
 }
 
 const getCitaByOdonto = async (req, resp = response) => {
-
     try {
         const {idOdontologo} = req.params;
         const citas = await Cita.find({idOdontologo: idOdontologo})
