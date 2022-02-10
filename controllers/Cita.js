@@ -236,7 +236,7 @@ const getCitaByOdonto = async (req, resp = response) => {
     try {
         const {idOdontologo} = req.params;
         const citas = await Cita.find({idOdontologo: idOdontologo})
-                                    .populate('idHorario','fechaNow')
+                                    .populate('idHorario','fecha')
                                     .populate('idCupo')
                                     .populate('idSede', 'nombre')
                                     .populate('tipoCita','nombre')
@@ -261,7 +261,7 @@ const getCitaByUsuario = async (req, resp = response) => {
     try {
         const {idCliente} = req.params;
         const citas = await Cita.find({idCliente: idCliente})
-                                    .populate('idHorario','fechaNow')
+                                    .populate('idHorario','fecha')
                                     .populate('idCupo')
                                     .populate('idSede', 'nombre')
                                     .populate('tipoCita','nombre')
