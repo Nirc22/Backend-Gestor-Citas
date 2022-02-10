@@ -5,7 +5,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { OndontoRole } = require('../middlewares/validar-roles');
 
-const {getCita, crearCita, actualizarCita, eliminarCita, getCitaByOdonto} = require('../controllers/Cita');
+const {getCita, crearCita, actualizarCita, eliminarCita, getCitaByOdonto, getCitaByUsuario} = require('../controllers/Cita');
 
 
 
@@ -16,7 +16,9 @@ router.use(validarJWT);
 
 router.get('/', getCita);
 
-router.get('/:idOdontologo',OndontoRole, getCitaByOdonto);
+router.get('/odontologo/:idOdontologo',OndontoRole, getCitaByOdonto);
+
+router.get('/usuario/:idCliente',OndontoRole, getCitaByUsuario);
 
 router.post(
     '/create', 

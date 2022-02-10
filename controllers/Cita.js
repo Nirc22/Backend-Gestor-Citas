@@ -113,7 +113,6 @@ const actualizarCita = async (req, resp = response) => {
         const resul = now.diff(old, 'hours');
 
         if(resul>24){
-            
             if(citas){
                 return resp.status(200).json({
                     ok: false,
@@ -253,6 +252,31 @@ const getCitaByOdonto = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
+            msg: 'Error al listar citas por Odontologo',
+        });
+    }
+}
+
+const getCitaByUsuario = async (req, resp = response) => {
+    try {
+        const {idCliente} = req.params;
+        const citas = await Cita.find({idCliente: idCliente})
+                                    .populate('idHorario','fechaNow')
+                                    .populate('idCupo')
+                                    .populate('idSede', 'nombre')
+                                    .populate('tipoCita','nombre')
+                                    .populate('idOdontologo', ['nombre','apellidos','email','telefono','documento','fechaNacimiento', 'idEspecializacion', 'idSede'])
+
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de Citas Por Usuario',
+            citas
+        });
+    }
+    catch(error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
             msg: 'Error al listar citas',
         });
     }
@@ -263,5 +287,6 @@ module.exports = {
     crearCita,
     actualizarCita,
     eliminarCita,
-    getCitaByOdonto
+    getCitaByOdonto,
+    getCitaByUsuario
 };
