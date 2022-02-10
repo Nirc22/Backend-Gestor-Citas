@@ -18,7 +18,7 @@ router.get('/', getCita);
 
 router.get('/odontologo/:idOdontologo',OndontoRole, getCitaByOdonto);
 
-router.get('/usuario/:idCliente',OndontoRole, getCitaByUsuario);
+router.get('/usuario/:idCliente', getCitaByUsuario);
 
 router.post(
     '/create', 
