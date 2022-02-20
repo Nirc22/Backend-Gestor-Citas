@@ -20,9 +20,9 @@ const filtroTipoCitaYSede = async (req, resp = response) => {
         var listaOdonto = [];
 
         for await( esp of especializacion){
-            const odontologo = await Odontologo.find({idEspecializacion: esp._id, idSede: idSede });
-            if(odontologo){
-                listaOdonto = [...listaOdonto, odontologo];
+            const odontologos = await Odontologo.find({idEspecializacion: esp._id, idSede: idSede });
+            if(odontologos){
+                odontologos.map(odontologo => listaOdonto.push(odontologo))
             }
         }
 
@@ -78,9 +78,7 @@ const filtroOndont = async (req, resp = response) => {
                     horario
                 });
             }
-    
         }
-        
     } catch (error) {
         console.log(error);
         resp.status(400).json({
