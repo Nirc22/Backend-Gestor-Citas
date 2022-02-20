@@ -11,7 +11,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
 router.use(validarJWT);
 
 //rutas 
-router.get('/tipocita', 
+router.post('/tipocita', 
     [
         check('idTipoCita','el idTipoCita es obligatorio').not().isEmpty(),
         check('idSede','el idSede es obligatorio').not().isEmpty()
@@ -20,7 +20,7 @@ router.get('/tipocita',
     filtroTipoCitaYSede
 );
 
-router.get('/odonto',     
+router.post('/odonto',     
     [
         check('idOdontologo','el idOdontologo es obligatorio').not().isEmpty()
     ],
@@ -28,7 +28,7 @@ router.get('/odonto',
     filtroOndont
 );
 
-router.get('/fecha', 
+router.post('/fecha', 
     [
         check('fecha','la fecha es obligatoria').not().isEmpty(),
         check('idOdontologo','el idOdontologo es obligatorio').not().isEmpty()
