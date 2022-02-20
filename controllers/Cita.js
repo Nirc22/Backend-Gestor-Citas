@@ -32,6 +32,36 @@ const getCita = async (req, resp = response) => {
     }
 }
 
+
+/* Listar citas*/
+const getCitaByID = async (req, resp = response) => {
+    try {
+        const {idCita} = req.params;
+        
+        const cita = await Cita.findById(idCita)
+                                    .populate('idHorario','fecha')
+                                    .populate('idCupo')
+                                    .populate('idSede', 'nombre')
+                                    .populate('tipoCita','nombre')
+                                    .populate('idOdontologo',['nombre','apellidos','idEspecializacion'])
+                                    .populate('idCliente', ['nombre','apellidos','email','telefono','documento','fechaNacimiento'])
+        
+        resp.status(200).json({
+            ok: true,
+            msg: 'Cita por ID',
+            cita
+        });
+    }
+    catch(error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al lista cita',
+        });
+    }
+}
+
+
 /* Crear Citas */
 const crearCita = async (req, resp = response) => { 
 
@@ -288,5 +318,6 @@ module.exports = {
     actualizarCita,
     eliminarCita,
     getCitaByOdonto,
-    getCitaByUsuario
+    getCitaByUsuario,
+    getCitaByID
 };

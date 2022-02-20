@@ -21,10 +21,9 @@ const filtroTipoCitaYSede = async (req, resp = response) => {
 
         for await( esp of especializacion){
             const odontologo = await Odontologo.find({idEspecializacion: esp._id, idSede: idSede });
-            if(!odontologo){
+            if(odontologo){
                 listaOdonto = [...listaOdonto, odontologo];
             }
-            
         }
 
         if(listaOdonto.length === 0){
@@ -32,7 +31,6 @@ const filtroTipoCitaYSede = async (req, resp = response) => {
                 ok: false,
                 msg: 'No hay respuestas'
             });
-
         }else{
             resp.status(200).json({
                 ok: true,
