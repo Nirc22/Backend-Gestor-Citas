@@ -52,7 +52,12 @@ const filtroOndont = async (req, resp = response) => {
     try {
         const {idOdontologo} = req.body;
 
-        let horario = await Horario.find({idOdontologo: idOdontologo});
+        let horario = await Horario.find({idOdontologo: idOdontologo})
+                                                                .populate({
+                                                                    path: 'idCupos.cupo',
+                                                                    model: 'cupo'
+                                                                });
+
         horario = horario.filter(h => h.idCupos.length != 0);
 
         const odontologo = await Odontologo.findById(idOdontologo);
