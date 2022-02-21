@@ -17,7 +17,7 @@ const getCita = async (req, resp = response) => {
                                     .populate('idOdontologo',['nombre','apellidos','idEspecializacion'])
                                     .populate('idCliente', ['nombre','apellidos','email','telefono','documento','fechaNacimiento'])
 
-        resp.status(200).json({
+        return resp.status(200).json({
             ok: true,
             msg: 'Lista de Citas',
             citas
@@ -25,7 +25,7 @@ const getCita = async (req, resp = response) => {
     }
     catch(error) {
         console.log(error);
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al listar citas',
         });
@@ -46,7 +46,7 @@ const getCitaByID = async (req, resp = response) => {
                                     .populate('idOdontologo',['nombre','apellidos','idEspecializacion'])
                                     .populate('idCliente', ['nombre','apellidos','email','telefono','documento','fechaNacimiento'])
         
-        resp.status(200).json({
+        return resp.status(200).json({
             ok: true,
             msg: 'Cita por ID',
             cita
@@ -54,7 +54,7 @@ const getCitaByID = async (req, resp = response) => {
     }
     catch(error) {
         console.log(error);
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al lista cita',
         });
@@ -93,14 +93,14 @@ const crearCita = async (req, resp = response) => {
             
             await Horario.findByIdAndUpdate(idHorario, horario, {new: true});
 
-            resp.status(201).json({
+            return resp.status(201).json({
                 ok: true,
                 msg: 'Cita creada de manera exitosa',
                 citaSave
             });
 
         }else{
-            resp.status(201).json({
+            return resp.status(201).json({
                 ok: true,
                 msg: 'No se pudo crear la cita'
             });
@@ -109,7 +109,7 @@ const crearCita = async (req, resp = response) => {
 
     } catch(error) {
         console.log(error);
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al crear la cita',
         });
@@ -178,26 +178,26 @@ const actualizarCita = async (req, resp = response) => {
     
                 await Horario.findByIdAndUpdate(_id, horario, {new: true});
         
-                resp.status(200).json({
+                return resp.status(200).json({
                     ok: true,
                     msg: 'Cita actualizada de manera exitosa',
                     cita: citaActualizada
                 });
             }else{
-                resp.status(200).json({
+                return resp.status(200).json({
                     ok: false,
                     msg: 'No se pudo actualizar el cupo anterior',
                 });
             }
         }else{
-            resp.status(200).json({
+            return resp.status(200).json({
                 ok: false,
                 msg: 'No puede actualizar o cancelar la cita agendada antes de 24 horas',
             });
         }
     } catch(error) {
         console.log(error);
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al actualizar la cita',
         });
@@ -211,7 +211,7 @@ const eliminarCita = async (req, resp = response) => {
                                                 .populate('idHorario');
 
         if(!cita) {
-            resp.status(201).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'El id de la cita no coincide con ningun elemento en la base de datos',
             });
@@ -224,7 +224,7 @@ const eliminarCita = async (req, resp = response) => {
 
         const old = moment(`${fecha} ${horaInicio}`,'DD-MM-YYYY HH:mm');
 
-        const resul = now.diff(old, 'hours');
+        const resul = old.diff(now, 'hours');
         console.log(resul);
         if(resul>24){
             const id = req.params.id;
@@ -241,13 +241,13 @@ const eliminarCita = async (req, resp = response) => {
 
             await Cita.findByIdAndDelete(id);
             
-            resp.status(200).json({
+            return resp.status(200).json({
                 ok: true,
                 msg: 'Cita cancelada de manera exitosa'
             });
 
         }else{
-            resp.status(200).json({
+            return resp.status(200).json({
                 ok: false,
                 msg: 'No puede cancelar la cita agendada antes de 24 horas',
             });
@@ -255,7 +255,7 @@ const eliminarCita = async (req, resp = response) => {
 
     } catch(error) {
         console.log(error);
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al eliminar la cita',
         });
@@ -272,7 +272,7 @@ const getCitaByOdonto = async (req, resp = response) => {
                                     .populate('tipoCita','nombre')
                                     .populate('idCliente', ['nombre','apellidos','email','telefono','documento','fechaNacimiento'])
 
-        resp.status(200).json({
+        return resp.status(200).json({
             ok: true,
             msg: 'Lista de Citas',
             citas
@@ -280,7 +280,7 @@ const getCitaByOdonto = async (req, resp = response) => {
     }
     catch(error) {
         console.log(error);
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al listar citas por Odontologo',
         });
@@ -297,7 +297,7 @@ const getCitaByUsuario = async (req, resp = response) => {
                                     .populate('tipoCita','nombre')
                                     .populate('idOdontologo', ['nombre','apellidos','email','telefono','documento','fechaNacimiento', 'idEspecializacion', 'idSede'])
 
-        resp.status(200).json({
+        return resp.status(200).json({
             ok: true,
             msg: 'Lista de Citas Por Usuario',
             citas
@@ -305,7 +305,7 @@ const getCitaByUsuario = async (req, resp = response) => {
     }
     catch(error) {
         console.log(error);
-        resp.status(500).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error al listar citas',
         });
