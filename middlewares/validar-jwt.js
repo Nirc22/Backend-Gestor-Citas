@@ -31,7 +31,6 @@ const validarJWT = async (req = request, res = response, next) => {
         //Buscar si existe odontólogo y si existe mirar si está activo
         if(usuario) {
             req.usuario = usuario;
-
         }else{
             if(odontologo){
                 if(!odontologo.estado){

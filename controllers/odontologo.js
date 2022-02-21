@@ -122,7 +122,7 @@ const actualizarOdontologo = async (req, resp = response) => {
 const actualizarPassword = async (req, resp = response) => {
 
     const {password} = req.body;
-    const odonAutenticado = req.usuario;
+    const odonAutenticado = req.odontologo;
 
     try {
 
@@ -130,7 +130,7 @@ const actualizarPassword = async (req, resp = response) => {
         const salt = bcrypt.genSaltSync();
         odonAutenticado.password = bcrypt.hashSync(password, salt);
 
-        const passwordUpdate = await Usuario.findByIdAndUpdate(odonAutenticado.id, odonAutenticado, { new: true });
+        const passwordUpdate = await Odontologo.findByIdAndUpdate(odonAutenticado.id, odonAutenticado, { new: true });
 
         resp.status(200).json({
             ok: true,

@@ -33,7 +33,17 @@ router.post(
     ],
     validarJWT,
     AdminRole,
-    crearOdontologo);
+    crearOdontologo
+);
+
+router.put('/update/password',
+    [
+        check('password', 'El password debe ser de 6 caracteres').isLength({min:6}),
+        validarCampos
+    ],
+    validarJWT,
+    actualizarPassword
+);
 
 router.put(
     '/update/:id', 
@@ -47,8 +57,7 @@ router.put(
         validarCampos
     ],
     validarJWT,
-    AdminRole,
-    actualizarOdontologo);
-
+    actualizarOdontologo
+);
 
 module.exports = router;
