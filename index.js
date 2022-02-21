@@ -31,3 +31,5 @@ app.use('/api/filtros', require('./Routes/filtros'));
 app.listen(process.env.Port, () =>{
     console.log(`Servidor corriendo en el puerto ${process.env.Port}`);
 });
+
+module.exports = app

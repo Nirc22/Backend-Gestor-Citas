@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha test/api.test.js --exit"
   },
   "keywords": [],
   "author": "",
@@ -17,9 +18,11 @@
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.2.1",
     "moment": "^2.29.1",
     "mongoose": "^6.0.14",
     "nodemailer": "^6.7.2",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   }
 }
